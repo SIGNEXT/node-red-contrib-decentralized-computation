@@ -1,0 +1,28 @@
+{
+    "if": {
+        "if": "if",
+        "label": {
+            "property": "Property",
+            "rule": "rule",
+            "repair": "recreate message sequences",
+            "predicates": "Node Predicates (separate by space)",
+            "priorities": "Node Priorities (separate by space)"
+        },
+        "previous": "previous value",
+        "and": "and",
+        "checkall": "checking all rules",
+        "stopfirst": "stopping after first match",
+        "ignorecase": "ignore case",
+        "rules": {
+            "btwn": "is between",
+            "true": "is true",
+            "false": "is false",
+            "null": "is null",
+            "nnull": "is not null"
+        },
+        "errors": {
+            "invalid-expr": "Invalid JSONata expression: __error__",
+            "too-many": "too many pending messages in if node"
+        }
+    }
+}
