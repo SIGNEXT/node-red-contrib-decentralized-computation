@@ -1,0 +1,38 @@
+<script type="text/html" data-template-name="nothing">
+    <h4>I do nothing!</h4>
+    <div class="form-row" style="margin-bottom: 0px">
+        <label for="node-input-tags"><span data-i18n="nothing.label.predicates"></span></label>
+        <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-predicates"></div>
+    </div>
+    <div class="form-row" style="margin-bottom: 0px">
+        <label for="node-input-tags"><span data-i18n="nothing.label.priorities"></span></label>
+        <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-priorities"></div>
+    </div>
+    <div class="form-row">
+        <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="orchestrator.label.broker"></span></label>
+        <input type="text" id="node-input-broker">
+    </div>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('nothing',{
+        category: 'common',
+        defaults: {
+            name: {value:""},
+            tags: {value:""},
+            predicates: { value: "" },
+            broker: { type: "mqtt-broker", required: false },
+            priorities: { value: "" }
+        },
+        color:"#ffffff",
+        inputs:1,
+        outputs:1,
+        icon: "nothing.svg",
+        label: function() {
+            return this.name||"nothing";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        },
+    });
+</script>

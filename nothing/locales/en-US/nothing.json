@@ -1,0 +1,9 @@
+{
+    "nothing": {
+        "nothing": "nothing",
+        "label": {
+            "predicates": "Node Predicates (separate by space)",
+            "priorities": "Node Priorities (separate by space)"
+        }
+    }
+}
