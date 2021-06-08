@@ -1,0 +1,80 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<script type="text/html" data-template-name="and">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
+        <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name"></div>
+    </div>
+    <div class="form-row">
+        <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="orchestrator.label.broker"></span></label>
+        <input type="text" id="node-input-broker">
+    </div>
+    <div class="form-row">
+        <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="and.label.property"></span></label>
+        <input type="text" id="node-input-property" style="width: 70%"/>
+        <input type="hidden" id="node-input-outputs"/>
+    </div>
+    <div class="form-row" style="margin-bottom: 0px">
+        <label for="node-input-tags"><span data-i18n="and.label.predicates"></span></label>
+        <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-predicates"></div>
+    </div>
+    <div class="form-row" style="margin-bottom: 0px">
+        <label for="node-input-tags"><span data-i18n="and.label.priorities"></span></label>
+        <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-priorities"></div>
+    </div>
+    <div class="form-row" style="margin-bottom: 0px">
+        <label for="node-input-count"><span data-i18n="and.label.inputs"></span></label>
+        <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-count"></div>
+    </div>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('and', {
+        color: "#fdd0a2",
+        category: 'function',
+        defaults: {
+            name: { value: "" },
+            property: {value:"payload", required:true, validate: RED.validators.typedInput("propertyType")},
+            propertyType: { value:"msg" },
+            count: { value: "", required:true,validate:RED.validators.number() },
+            predicates: { value: "" },
+            broker: { type: "mqtt-broker", required: false },
+            priorities: { value: "micropython" }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "join.svg",
+        label: function () {
+            return this.name || this._("and.and");
+        },
+        labelStyle: function () {
+            return this.name ? "node_label_italic" : "";
+        },
+        oneditprepare: function () {
+            var that = this;
+            $("#node-input-property").typedInput({default:this.propertyType||'msg',types:['msg','flow','global','jsonata','env']});
+        },
+        oneditsave: function () {
+            this.propertyType = $("#node-input-property").typedInput('type');
+        },
+        oneditcancel: function () {
+
+        },
+        oneditresize: function (size) {
+
+        }
+    });
+</script>
