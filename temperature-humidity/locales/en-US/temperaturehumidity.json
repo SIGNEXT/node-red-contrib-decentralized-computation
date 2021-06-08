@@ -1,0 +1,12 @@
+{
+    "temperature": {
+        "temperature": "temperature",
+        "label": {
+            "pin": "Pin",
+            "predicates": "Node Predicates (separate by space)",
+            "priorities": "Node Priorities (separate by space)"
+        },
+        "repeat": "Repeat with interval",
+        "units": "miliseconds"
+    }
+}
