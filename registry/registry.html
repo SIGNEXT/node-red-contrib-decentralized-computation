@@ -1,0 +1,64 @@
+<script type="text/html" data-template-name="registry">
+    <div class="form-row">
+        <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="registry.label.broker"></span></label>
+        <input type="text" id="node-input-broker">
+    </div>
+    <div class="form-row">
+        <label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="common.label.topic"></span></label>
+        <input type="text" id="node-input-topic" data-i18n="[placeholder]common.label.topic">
+    </div>
+    <div class="form-row">
+        <label for="node-input-qos"><i class="fa fa-empire"></i> <span data-i18n="registry.label.qos"></span></label>
+        <select id="node-input-qos" style="width:125px !important">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-datatype"><i class="fa fa-sign-out"></i> <span data-i18n="registry.label.output"></span></label>
+        <select id="node-input-datatype" style="width:70%;">
+            <option value="auto" data-i18n="registry.output.auto"></option>
+            <option value="buffer" data-i18n="registry.output.buffer"></option>
+            <option value="utf8" data-i18n="registry.output.string"></option>
+            <option value="json" data-i18n="registry.output.json"></option>
+            <option value="base64" data-i18n="registry.output.base64"></option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
+    </div>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('registry',{
+        category: 'common',
+        defaults: {
+            name: {value:""},
+            topic: {value:"announcements/+",required:true,validate: RED.validators.regex(/^(#$|(\+|[^+#]*)(\/(\+|[^+#]*))*(\/(\+|#|[^+#]*))?$)/)},
+            qos: {value: "2"},
+            retain: {value: true },
+            datatype: {value:"json",required:true},
+            broker: {type:"mqtt-broker", required:true},
+        },
+        color:"#d8bfd8",
+        inputs:0,
+        outputs:1,
+        icon: "bridge.svg",
+        label: function() {
+            return this.name||this.topic||"registry";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        },
+        oneditprepare: function() {
+            if (this.qos === undefined) {
+                $("#node-input-qos").val("2");
+            }
+            if (this.datatype === undefined) {
+                $("#node-input-datatype").val("json");
+            }
+        }
+    });
+</script>
