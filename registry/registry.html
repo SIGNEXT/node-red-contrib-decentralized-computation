@@ -47,10 +47,10 @@
         outputs:1,
         icon: "bridge.svg",
         label: function() {
-            return this.name||this.topic||"registry";
+            return this.name || "registry";
         },
         labelStyle: function() {
-            return this.name?"node_label_italic":"";
+            return this.name ? "node_label_italic":"";
         },
         oneditprepare: function() {
             if (this.qos === undefined) {

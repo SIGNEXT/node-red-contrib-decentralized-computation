@@ -10,6 +10,11 @@
     "scripts": {
         "start": "node-red"
     },
+    "author": {
+        "name": "signext",
+        "url": "http://signext.github.io/"
+    },
+    "contributors": ["pmcosta", "jpdias"],
     "keywords": [
         "node-red",
         "decentralized-execution"
@@ -24,5 +29,10 @@
             "registry": "registry/registry.js", 
             "temperature-humidity": "temperature-humidity/temperaturehumidity.js"
         }
-    }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/SIGNEXT/node-red-contrib-decentralized-computation.git"
+    },
+    "license": "MIT"
 }
