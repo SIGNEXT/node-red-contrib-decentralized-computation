@@ -16,23 +16,23 @@
 
 <script type="text/html" data-template-name="if">
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
-        <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
     </div>
     <div class="form-row">
-        <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="orchestrator.label.broker"></span></label>
+        <label for="node-input-broker"><i class="fa fa-globe"></i> MQTT Broker</label>
         <input type="text" id="node-input-broker">
     </div>
     <div class="form-row" style="margin-bottom: 0px">
-        <label for="node-input-predicates"><span data-i18n="if.label.predicates"></span></label>
+        <label for="node-input-predicates">Node Predicates (separate by space)</label>
         <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-predicates"></div>
     </div>
     <div class="form-row" style="margin-bottom: 0px">
-        <label for="node-input-priorities"><span data-i18n="if.label.priorities"></span></label>
+        <label for="node-input-priorities">Node Priorities (separate by space)</label>
         <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-priorities"></div>
     </div>
     <div class="form-row">
-        <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="if.label.property"></span></label>
+        <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> Property</label>
         <input type="text" id="node-input-property" style="width: 70%"/>
         <input type="hidden" id="node-input-outputs"/>
     </div>
@@ -41,7 +41,7 @@
     </div>
     <div class="form-row">
         <input type="checkbox" id="node-input-repair" style="display: inline-block; width: auto; vertical-align: top;">
-        <label style="width: auto;" for="node-input-repair"><span data-i18n="if.label.repair"></span></label></input>
+        <label style="width: auto;" for="node-input-repair">recreate message sequences</label>
     </div>
 </script>
 
@@ -54,11 +54,11 @@
             { v: "lte", t: "<=", kind: 'V' },
             { v: "gt", t: ">", kind: 'V' },
             { v: "gte", t: ">=", kind: 'V' },
-            { v: "btwn", t: "if.rules.btwn", kind: 'V' },
-            { v: "true", t: "if.rules.true", kind: 'V' },
-            { v: "false", t: "if.rules.false", kind: 'V' },
-            { v: "null", t: "if.rules.null", kind: 'V' },
-            { v: "nnull", t: "if.rules.nnull", kind: 'V' },
+            { v: "btwn", t: "is between", kind: 'V' },
+            { v: "true", t: "is true", kind: 'V' },
+            { v: "false", t: "is false", kind: 'V' },
+            { v: "null", t: "is null", kind: 'V' },
+            { v: "nnull", t: "is not null", kind: 'V' },
         ];
 
         function clipValueLength(v) {

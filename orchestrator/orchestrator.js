@@ -90,7 +90,7 @@
         });
 
         if (this.brokerConn && this.brokerConn.connected) {
-            node.status({ fill: "green", shape: "dot", text: "node-red:common.status.connected" });
+            node.status({ fill: "green", shape: "dot", text: "Connected to broker" });
         }
 
         node.brokerConn && node.brokerConn.register(node);

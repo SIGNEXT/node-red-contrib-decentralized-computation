@@ -15,32 +15,32 @@
 -->
 <script type="text/html" data-template-name="orchestrator">
     <div class="form-row">
-        <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="orchestrator.label.broker"></span></label>
+        <label for="node-input-broker"><i class="fa fa-globe"></i>MQTT Broker</label>
         <input type="text" id="node-input-broker">
     </div>
     <div class="form-row">
-        <label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="common.label.topic"></span></label>
-        <input type="text" id="node-input-topic" data-i18n="[placeholder]common.label.topic">
+        <label for="node-input-topic"><i class="fa fa-tasks"></i>Topic</label>
+        <input type="text" id="node-input-topic" placeholder="topic/">
     </div>
     <div class="form-row">
-        <label for="node-input-qos"><i class="fa fa-empire"></i> <span data-i18n="orchestrator.label.qos"></span></label>
+        <label for="node-input-qos"><i class="fa fa-empire"></i>QoS</label>
         <select id="node-input-qos" style="width:125px !important">
             <option value=""></option>
             <option value="0">0</option>
             <option value="1">1</option>
             <option value="2">2</option>
         </select>
-        &nbsp;&nbsp;<i class="fa fa-history"></i>&nbsp;<span data-i18n="orchestrator.retain"></span> &nbsp;<select id="node-input-retain" style="width:125px !important">
+        &nbsp;&nbsp;<i class="fa fa-history"></i>&nbsp;Retain&nbsp;<select id="node-input-retain" style="width:125px !important">
             <option value=""></option>
-            <option value="false" data-i18n="orchestrator.false"></option>
-            <option value="true" data-i18n="orchestrator.true"></option>
+            <option value="false">false</option>
+            <option value="true">true</option>
         </select>
     </div>
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
-        <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
     </div>
-    <div class="form-tips"><span data-i18n="orchestrator.tip"></span></div>
+    <div class="form-tips">Tip: Leave topic, qos or retain blank if you want to set them via msg properties.</div>
 </script>
 
 <script type="text/javascript">
