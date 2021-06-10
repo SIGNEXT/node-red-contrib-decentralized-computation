@@ -61,7 +61,7 @@
 
 <script type="text/javascript">
     RED.nodes.registerType('proxy mqtt in',{
-        category: 'network',
+        category: 'orchestrator',
         defaults: {
             name: {value:""},
             topic: {value:"",required:true,validate: RED.validators.regex(/^(#$|(\+|[^+#]*)(\/(\+|[^+#]*))*(\/(\+|#|[^+#]*))?$)/)},

@@ -1,34 +1,33 @@
 <script type="text/html" data-template-name="temperature-humidity">
     <div class="form-row">
-        <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="orchestrator.label.broker"></span></label>
+        <label for="node-input-broker"><i class="fa fa-globe"></i>MQTT Server</label>
         <input type="text" id="node-input-broker">
     </div>
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
-        <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name"></div>
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-name"></div>
     </div>
     <div class="form-row" style="margin-bottom: 0px">
-        <label for="node-input-pin"><span data-i18n="temperature.label.pin"></span></label>
+        <label for="node-input-pin">Pin Number (Data) for DHT Sensor</label>
         <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-pin"></div>
     </div>
     <div class="form-row" style="margin-bottom: 0px">
-        <label for="node-input-predicates"><span data-i18n="temperature.label.predicates"></span></label>
+        <label for="node-input-predicates">Node Predicates (separate by space)</label>
         <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-predicates"></div>
     </div>
     <div class="form-row" style="margin-bottom: 0px">
-        <label for="node-input-priorities"><span data-i18n="temperature.label.priorities"></span></label>
+        <label for="node-input-priorities">Node Priorities (separate by space)</label>
         <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-priorities"></div>
     </div>
     <div class="form-row" id="node-repeat">
-        <label for="node-input-repeat">&nbsp;</label>
+        <label for="node-input-repeat">Repeat with interval</label>
         <input type="checkbox" id="node-input-repeat" style="display:inline-block; width:15px; vertical-align:baseline;">
-        <span data-i18n="temperature.repeat"></span>&nbsp;
-        <input type="text" id="node-input-interval" placeholder="0.1" style="width:45px; height:28px;">&nbsp;
-        <span data-i18n="temperature.units"></span>
+        <label for="node-input-interval">Interval (ms)</label>
+        <input type="text" id="node-input-interval" placeholder="0.1" style="width:45px; height:28px;">
     </div>
 
     <div class="form-row" >
-        <label for="node-input-action"><i class="fa fa-tasks"></i> <span data-i18n="delay.action"></span></label>
+        <label for="node-input-action"><i class="fa fa-tasks"></i>Alternative execution</label>
         <select id="node-input-action" style="width:270px !important">
             <option value="local">Execute locally if remote not available</option>
             <option value="forward"> Send error message</option>
@@ -39,7 +38,7 @@
 <script type="text/javascript">
     RED.nodes.registerType('temperature-humidity', {
         color: "#fdd0a2",
-        category: 'function',
+        category: 'micropython',
         defaults: {
             name: { value: "" },
             pin: { value: "", required:true, validate:RED.validators.number() },
@@ -53,7 +52,7 @@
         outputs: 2,
         icon: "temperature.svg",
         label: function () {
-            return this.name || this._("temperature.temperature");
+            return this.name || "temperature-humidity";
         },
         labelStyle: function () {
             return this.name ? "node_label_italic" : "";

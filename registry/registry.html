@@ -33,7 +33,7 @@
 
 <script type="text/javascript">
     RED.nodes.registerType('registry',{
-        category: 'common',
+        category: 'orchestrator',
         defaults: {
             name: {value:""},
             topic: {value:"announcements/+",required:true,validate: RED.validators.regex(/^(#$|(\+|[^+#]*)(\/(\+|[^+#]*))*(\/(\+|#|[^+#]*))?$)/)},
