@@ -40,6 +40,7 @@
             ts = ts.replace(/^\$share\/[^#+/]+\/(.*)/g, "$1");
 
         }
+        // eslint-disable-next-line no-useless-escape
         var re = new RegExp("^" + ts.replace(/([\[\]\?\(\)\\\\$\^\*\.|])/g, "\\$1").replace(/\+/g, "[^/]+").replace(/\/#$/, "(\/.*)?") + "$");
         return re.test(t);
     }
@@ -251,7 +252,7 @@
                         node.connected = true;
                         node.log(RED._("mqtt.state.connected", { broker: (node.clientid ? node.clientid + "@" : "") + node.brokerurl }));
                         for (var id in node.users) {
-                            if (node.users.hasOwnProperty(id)) {
+                            if (Object.prototype.hasOwnProperty.call(node.users,"id")) {
                                 node.users[id].status({ fill: "green", shape: "dot", text: "node-red:common.status.connected" });
                             }
                         }
@@ -260,11 +261,11 @@
 
                         // Re-subscribe to stored topics
                         for (var s in node.subscriptions) {
-                            if (node.subscriptions.hasOwnProperty(s)) {
+                            if (Object.prototype.hasOwnProperty.call(node.subscriptions,"s")) {
                                 var topic = s;
                                 var qos = 0;
                                 for (var r in node.subscriptions[s]) {
-                                    if (node.subscriptions[s].hasOwnProperty(r)) {
+                                    if (Object.prototype.hasOwnProperty.call(node.subscriptions[s],"r")) {
                                         qos = Math.max(qos, node.subscriptions[s][r].qos);
                                         node.client.on('message', node.subscriptions[s][r].handler);
                                     }
@@ -281,7 +282,7 @@
                     });
                     node.client.on("reconnect", function () {
                         for (var id in node.users) {
-                            if (node.users.hasOwnProperty(id)) {
+                            if (Object.prototype.hasOwnProperty.call(node.users,"id")) {
                                 node.users[id].status({ fill: "yellow", shape: "ring", text: "node-red:common.status.connecting" });
                             }
                         }
@@ -292,7 +293,7 @@
                             node.connected = false;
                             node.log(RED._("mqtt.state.disconnected", { broker: (node.clientid ? node.clientid + "@" : "") + node.brokerurl }));
                             for (var id in node.users) {
-                                if (node.users.hasOwnProperty(id)) {
+                                if (Object.prototype.hasOwnProperty.call(node.users,"id")) {
                                     node.users[id].status({ fill: "red", shape: "ring", text: "node-red:common.status.disconnected" });
                                 }
                             }
@@ -303,9 +304,9 @@
 
                     // Register connect error handler
                     // The client's own reconnect logic will take care of errors
-                    node.client.on('error', function (error) { });
+                    node.client.on('error', function (error) { console.log(error) });
                 } catch (err) {
-                    console.log(err);
+                    node.log(err);
                 }
             }
         };
@@ -545,8 +546,8 @@ def on_input_${textId}(topic, msg, retained):
                 if (node.topic) {
                     msg.topic = node.topic;
                 }
-                if (msg.hasOwnProperty("payload")) {
-                    if (msg.hasOwnProperty("topic") && (typeof msg.topic === "string") && (msg.topic !== "")) { // topic must exist
+                if (Object.prototype.hasOwnProperty.call(msg, "payload")) {
+                    if (Object.prototype.hasOwnProperty.call(msg, "topic") && (typeof msg.topic === "string") && (msg.topic !== "")) { // topic must exist
                         if (chk.test(msg.topic)) { node.warn(RED._("mqtt.errors.invalid-topic")); }
 
                         const status = deviceHandler.getStatus();

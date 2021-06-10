@@ -49,9 +49,9 @@ module.exports = function (RED) {
 
         this.on("input", function (msg, done) {
             try {
-                const value = RED.util.getMessageProperty(msg,this.property);
+                const value = RED.util.getMessageProperty(msg, this.property);
 
-                if (msg.hasOwnProperty("node_id") && this.topics.indexOf(msg.node_id) === -1) {
+                if (Object.prototype.hasOwnProperty.call(msg, "node_id") && this.topics.indexOf(msg.node_id) === -1) {
                     this.inputs.push(value);
                     this.topics.push(msg.topic);
                 }

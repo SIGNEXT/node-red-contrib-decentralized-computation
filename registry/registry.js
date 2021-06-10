@@ -27,7 +27,6 @@ module.exports = function (RED) {
         this.broker = n.broker;
         this.brokerConn = this.broker !== undefined ? RED.nodes.getNode(this.broker) : null;
         var node = this;
-        var chk = /[\+#]/;
 
         const devices = {};
         let firstTime = true;
@@ -53,7 +52,7 @@ module.exports = function (RED) {
             return this.warn(RED._("mqtt.errors.invalid-topic"));
         }
         this.datatype = n.datatype || "utf8";
-        var node = this;
+        
         if (this.brokerConn) {
             this.status({ fill: "red", shape: "ring", text: "node-red:common.status.disconnected" });
             if (this.topic) {

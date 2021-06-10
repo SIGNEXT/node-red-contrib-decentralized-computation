@@ -46,7 +46,7 @@
 
         // Simply send a message through the second output
         function handleFailure() {
-            node.send([, { payload: "Device failed", start: true}]);
+            node.send([null, { payload: "Device failed", start: true}]);
         }
 
         function sendReading(msg) {

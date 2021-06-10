@@ -52,7 +52,7 @@ module.exports = function (RED) {
     function getMaxKeptCount() {
         if (_maxKeptCount === undefined) {
             var name = "nodeMessageBufferMaxLength";
-            if (RED.settings.hasOwnProperty(name)) {
+            if (Object.prototype.hasOwnProperty.call(RED.settings, "name")) {
                 _maxKeptCount = RED.settings[name];
             }
             else {
@@ -174,9 +174,9 @@ module.exports = function (RED) {
                 currentRule: 0,
                 elseflag: true,
                 onward: [],
-                hasParts: msg.hasOwnProperty("parts") &&
-                    msg.parts.hasOwnProperty("id") &&
-                    msg.parts.hasOwnProperty("index")
+                hasParts: Object.prototype.hasOwnProperty.call(msg, "parts") &&
+                Object.prototype.hasOwnProperty.call(msg, "id") &&
+                Object.prototype.hasOwnProperty.call(msg, "index") 
             }
         }
         applyRule(node, msg, property, state, (err, hasMore, newResult) => {
@@ -228,7 +228,6 @@ module.exports = function (RED) {
 
         for (var i = 0; i < this.rules.length; i += 1) {
             var rule = this.rules[i];
-            needsCount = needsCount;
             if (!rule.vt) {
                 if (!isNaN(Number(rule.v))) {
                     rule.vt = 'num';
@@ -280,7 +279,7 @@ module.exports = function (RED) {
                 clearPending();
                 node.error(RED._("if.errors.too-many"), msg);
             }
-            if (parts.hasOwnProperty("count")) {
+            if (Object.prototype.hasOwnProperty.call(parts, "count")) {
                 group.count = parts.count;
             }
             return group;
@@ -321,9 +320,9 @@ module.exports = function (RED) {
         }
 
         function processMessage(msg, checkParts, done) {
-            var hasParts = msg.hasOwnProperty("parts") &&
-                msg.parts.hasOwnProperty("id") &&
-                msg.parts.hasOwnProperty("index");
+            var hasParts = Object.prototype.hasOwnProperty.call(msg, "parts") &&
+            Object.prototype.hasOwnProperty.call(msg, "id") &&
+            Object.prototype.hasOwnProperty.call(msg, "index") 
 
             if (needsCount && checkParts && hasParts) {
                 addMessageToPending(msg, done);

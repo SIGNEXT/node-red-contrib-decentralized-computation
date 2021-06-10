@@ -27,7 +27,6 @@
         this.broker = n.broker || this.brokerUrl;
         this.brokerConn = this.broker !== undefined ? RED.nodes.getNode(this.broker) : null;
         var node = this;
-        var chk = /[\+#]/;
 
         const start = Date.now()
 
@@ -103,6 +102,7 @@
         sendTelemetryData();
 
         try {
+            // eslint-disable-next-line no-unused-vars
             node.brokerConn.subscribe("/failure/+", 2, async (topic, payload, packet) => {
 
                 while (assigning) {
@@ -197,7 +197,7 @@
                 // node.log(`SUCCESS in sending rank to device ${address}: Status ${res.status}`);
                 return { id: address, status: res.status };
             }).catch(err => {
-                // node.log(`ERROR in sending rank to device ${address}: Status ${err.status}`);
+                node.log(`ERROR in sending rank to device ${address}: Status ${err.status}`);
                 return { id: address }
             })
 
