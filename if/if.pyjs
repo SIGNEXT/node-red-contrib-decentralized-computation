@@ -1,0 +1,35 @@
+input_topics = ["${inputTopic}"]
+output_topics_${textId} = [${outputTopics.map((a) => `"${a}"`)}]
+property_${textId} = "${property}"
+
+${ifBlock}
+
+def get_property_value_${textId}(msg):
+    properties = property_${textId}.split(".")
+    payload = ujson.loads(msg)
+
+    for property in properties:
+        try:
+            payload = ujson.loads(payload)
+        except:
+            pass
+        try:
+            if payload[property]:
+                payload = payload[property]
+            else:
+                break
+        except:
+            break
+    return payload
+
+def on_input_${textId}(topic, msg, retained):
+    msg = get_property_value_${textId}(msg)
+    res = if_function_${textId}(msg)
+    res = dict(
+        payload=str(res),
+        device_id=client_id,
+        node_id=node_id
+    )
+    loop = asyncio.get_event_loop()
+    loop.create_task(on_output(ujson.dumps(res), output_topics_${textId}))
+    return

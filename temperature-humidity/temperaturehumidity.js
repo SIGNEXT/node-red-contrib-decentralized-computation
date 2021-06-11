@@ -1,5 +1,17 @@
 module.exports = function (RED) {
   const DeviceHandler = require("devicehandler");
+  const fs = require('fs');
+
+  function loadCode(filename, node){
+    try {
+        let data = fs.readFileSync(__dirname + "/" + filename, 'utf8');  
+        node.log(`Sucess loading ${filename}`);
+        return data;
+    } catch(err) {
+        node.log(`Error loading ${filename}:${err}`);
+    }
+    return;
+  }
 
   function TemperatureHumidityNode(n) {
     RED.nodes.createNode(this, n);
@@ -54,80 +66,16 @@ module.exports = function (RED) {
      *
      * @param {*} rules
      */
+    // eslint-disable-next-line no-unused-vars
     function generateMicropythonCode(pin, repeat, interval) {
+      // eslint-disable-next-line no-unused-vars
       const textId = node.id.replace(".", "");
+      // eslint-disable-next-line no-unused-vars
       const outputTopics = node.wires
         .map((inner) => inner.map((n) => `${n.replace(".", "")}_input`))
         .flat();
 
-      const code = `\n
-# Node specific 
-
-import dht
-import machine
-import sys
-import utime
-input_topics = ["${textId}_input"]
-output_topics = [${outputTopics.map((n) => `"${n}"`)}]
-pin_${textId} = ${pin}
-interval_${textId} = ${interval}
-repeat_${textId} = ${repeat === false ? "False" : "True"}
-stop_repeat_${textId} = False
-timer_task_${textId} = None
-
-reference_timer_workaround = []
-
-def measure_${textId}(_):
-    pin = None
-    if sys.platform != "linux":
-        pin = machine.Pin(pin_${textId})
-    d = dht.DHT22(pin)
-    d.measure()
-    temperature = d.temperature()
-    humidity = d.humidity()
-    results = dict(
-        temperature=temperature,
-        humidity=humidity,
-        _msgid=str(utime.ticks_ms()),
-    )
-    msg = dict(
-        payload=ujson.dumps(results),
-        device_id=client_id,
-        node_id=node_id
-    )
-    print("[TEMPERATURE]: Got reading {}".format(msg))
-    loop = asyncio.get_event_loop()
-    loop.create_task(on_output(ujson.dumps(msg), output_topics))
-
-def stop_${textId}():
-    global stop_repeat_${textId}
-    stop_repeat_${textId} = True
-    if timer_task_${textId}:
-        timer_task_${textId}.cancel()
-    for timer in reference_timer_workaround:
-        timer.deinit()
-
-async def timer_exec_${textId}(callback, interval):
-    global timer_task_${textId}
-    if stop_repeat_${textId}:
-        return
-    callback(None)
-    await asyncio.sleep_ms(interval)
-    loop = asyncio.get_event_loop()
-    timer_task_${textId} = loop.create_task(timer_exec_${textId}(callback, interval))
-
-def exec_${textId}():
-    if repeat_${textId}:
-        if sys.platform != "linux":
-            timer = machine.Timer(-1)    
-            timer.init(period=interval_${textId}, mode=machine.Timer.PERIODIC, callback=measure_${textId})
-            reference_timer_workaround.append(timer)
-        else:
-            loop = asyncio.get_event_loop()
-            loop.create_task(timer_exec_${textId}(measure_${textId}, interval_${textId}))
-    else: 
-        measure_${textId}(None)
-    return`;
+      const code = eval('`\n' + loadCode('temphum.pyjs', node) + '\n`');
       return code;
     }
   }

@@ -1,0 +1,7 @@
+import ujson
+input_topics = ["${inputTopic}"]
+output_topics = ["${topic}"]
+
+def on_input_${textId}(topic, msg, retained):
+    loop = asyncio.get_event_loop()
+    loop.create_task(on_output(msg, output_topics))

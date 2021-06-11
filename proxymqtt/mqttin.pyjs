@@ -1,0 +1,25 @@
+import ubinascii
+input_topics = ["${topic}"]
+output_topics = [${outputTopics.map((a) => `"${a}"`)}]
+node_datatype = "${node.datatype}"
+node_qos = ${node.qos}
+
+def on_input_${textId}(topic, msg, retained):
+    if node_datatype == "base64":
+        msg = str(ubinascii.b2a_base64(msg))
+    elif node_datatype == "utf8":
+        msg = msg.encode("utf-8")
+    elif node_datatype == "json":
+        try:
+            msg = ujson.loads(str(msg))
+        except:
+            print("Not a JSON")
+    msg = dict(
+        topic=topic,
+        payload=msg,
+        device_id=client_id,
+        qos=node_qos,
+        retain=retained
+    )
+    loop = asyncio.get_event_loop()
+    loop.create_task(on_output(ujson.dumps(msg), output_topics))

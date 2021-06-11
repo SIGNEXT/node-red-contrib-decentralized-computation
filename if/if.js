@@ -1,5 +1,18 @@
 module.exports = function (RED) {
   var DeviceHandler = require("devicehandler");
+  const fs = require('fs');
+
+  function loadCode(filename, node){
+    try {
+        let data = fs.readFileSync(__dirname + "/" + filename, 'utf8');  
+        node.log(`Sucess loading ${filename}`);
+        return data;
+    } catch(err) {
+        node.log(`Error loading ${filename}:${err}`);
+    }
+    return;
+  }
+
 
   var operators = {
     eq: function (a, b) {
@@ -464,13 +477,14 @@ module.exports = function (RED) {
 
     function generateMicropythonCode(property, rules) {
       const textId = node.id.replace(".", "");
-      let code = "";
 
       // const inputTopic = node.inputTopics.length > 0 ? node.inputTopics[0] : undefined;
+      // eslint-disable-next-line no-unused-vars
       const outputTopics = node.wires
         .map((inner) => inner.map((n) => `${n.replace(".", "")}_input`))
         .flat();
 
+      // eslint-disable-next-line no-unused-vars
       let ifBlock = ``;
       let rulesBlock = ``;
 
@@ -496,41 +510,7 @@ module.exports = function (RED) {
 
       ifBlock += `def if_function_${textId}(a):\n    res = ${rulesBlock}\n    return '%s' % res`;
 
-      code = `\ninput_topics = ["${inputTopic}"]
-output_topics_${textId} = [${outputTopics.map((a) => `"${a}"`)}]
-property_${textId} = "${property}"
-
-${ifBlock}
-
-def get_property_value_${textId}(msg):
-    properties = property_${textId}.split(".")
-    payload = ujson.loads(msg)
-
-    for property in properties:
-        try:
-            payload = ujson.loads(payload)
-        except:
-            pass
-        try:
-            if payload[property]:
-                payload = payload[property]
-            else:
-                break
-        except:
-            break
-    return payload
-
-def on_input_${textId}(topic, msg, retained):
-    msg = get_property_value_${textId}(msg)
-    res = if_function_${textId}(msg)
-    res = dict(
-        payload=str(res),
-        device_id=client_id,
-        node_id=node_id
-    )
-    loop = asyncio.get_event_loop()
-    loop.create_task(on_output(ujson.dumps(res), output_topics_${textId}))
-    return\n`;
+      let code = eval('`\n' + loadCode('if.pyjs', node) + '\n`');
 
       return code;
     }

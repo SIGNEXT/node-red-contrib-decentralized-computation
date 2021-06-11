@@ -5,6 +5,20 @@ module.exports = function (RED) {
   const url = require("url");
   const DeviceHandler = require("devicehandler");
 
+  const fs = require('fs');
+
+  function loadCode(filename, node){
+    try {
+        let data = fs.readFileSync(__dirname + "/" + filename, 'utf8');  
+        node.log(`Sucess loading ${filename}`);
+        return data;
+    } catch(err) {
+        node.log(`Error loading ${filename}:${err}`);
+    }
+    return;
+  }
+
+
   function matchTopic(ts, t) {
     if (ts == "#") {
       return true;
@@ -557,38 +571,16 @@ module.exports = function (RED) {
     } else {
       this.error(RED._("mqtt.errors.missing-config"));
     }
-
+    // eslint-disable-next-line no-unused-vars
     function generateMicropythonCode(node, topic) {
+      // eslint-disable-next-line no-unused-vars
       const textId = node.id.replace(".", "");
+      // eslint-disable-next-line no-unused-vars
       const outputTopics = node.wires
         .map((inner) => inner.map((n) => `${n.replace(".", "")}_input`))
         .flat();
 
-      const code = `\nimport ubinascii
-input_topics = ["${topic}"]
-output_topics = [${outputTopics.map((a) => `"${a}"`)}]
-node_datatype = "${node.datatype}"
-node_qos = ${node.qos}
-
-def on_input_${textId}(topic, msg, retained):
-    if node_datatype == "base64":
-        msg = str(ubinascii.b2a_base64(msg))
-    elif node_datatype == "utf8":
-        msg = msg.encode("utf-8")
-    elif node_datatype == "json":
-        try:
-            msg = ujson.loads(str(msg))
-        except:
-            print("Not a JSON")
-    msg = dict(
-        topic=topic,
-        payload=msg,
-        device_id=client_id,
-        qos=node_qos,
-        retain=retained
-    )
-    loop = asyncio.get_event_loop()
-    loop.create_task(on_output(ujson.dumps(msg), output_topics))\n`;
+      const code = eval('`\n' + loadCode('mqttin.pyjs', node) + '\n`');
 
       return code;
     }
@@ -675,18 +667,11 @@ def on_input_${textId}(topic, msg, retained):
     } else {
       this.error(RED._("mqtt.errors.missing-config"));
     }
-
+    // eslint-disable-next-line no-unused-vars
     function generateMicropythonCode(node, topic) {
+      // eslint-disable-next-line no-unused-vars
       const textId = node.id.replace(".", "");
-
-      const code = `
-\nimport ujson
-input_topics = ["${inputTopic}"]
-output_topics = ["${topic}"]
-
-def on_input_${textId}(topic, msg, retained):
-    loop = asyncio.get_event_loop()
-    loop.create_task(on_output(msg, output_topics))\n`;
+      const code = eval('`\n' + loadCode('mqttout.pyjs', node) + '\n`');
       return code;
     }
   }

@@ -1,5 +1,17 @@
 module.exports = function (RED) {
   const DeviceHandler = require("devicehandler");
+  const fs = require('fs');
+
+  function loadCode(filename, node){
+    try {
+        let data = fs.readFileSync(__dirname + "/" + filename, 'utf8');  
+        node.log(`Sucess loading ${filename}`);
+        return data;
+    } catch(err) {
+        node.log(`Error loading ${filename}:${err}`);
+    }
+    return;
+  }
 
   function AndNode(n) {
     RED.nodes.createNode(this, n);
@@ -73,6 +85,7 @@ module.exports = function (RED) {
      *
      * @param {*} rules
      */
+    /* eslint-disable no-unused-vars */
     function generateMicropythonCode(property, count) {
       const textId = node.id.replace(".", "");
       const outputTopics = node.wires
@@ -80,64 +93,11 @@ module.exports = function (RED) {
         .flat();
       const inputTopic = `${node.id.replace(".", "")}_input`;
 
-      const code = `\ninput_topics = ["${inputTopic}"]
-output_topics_${textId} = [${outputTopics.map((a) => `"${a}"`)}]
-nr_inputs_${textId} = ${count}
-property_${textId} = "${property}"
-inputs_${textId} = []
-topics_${textId} = []
-
-def get_property_value_${textId}(msg):
-    properties = property_${textId}.split(".")
-    payload = msg
-
-    for property in properties:
-        try:
-            if property in payload:
-                payload = payload[property]
-            else:
-                print("${textId}: Property not found")
-                break
-        except:
-            print("${textId}: Msg is not an object")
-            break
-
-    return payload
-
-def on_input_${textId}(topic, msg, retained):
-    global inputs_${textId}
-    global topics_${textId}
-
-    msg = ujson.loads(msg)
-
-    node_topic = msg["node_id"]
-
-    if node_topic not in topics_${textId}:
-        topics_${textId}.append(node_topic)
-        msg = get_property_value_${textId}(msg)
-        if (msg == 'True') or (msg == 'true') or (msg == True):
-            inputs_${textId}.append(True)
-        elif (msg == 'False') or (msg == 'false') or (msg == False):
-            inputs_${textId}.append(False)
-    
-    if len(topics_${textId}) == nr_inputs_${textId}:
-        result = True
-        for entry in inputs_${textId}:
-            result = result and entry
-        res = dict(
-            payload=result,
-            device_id = client_id,
-            node_id=node_id
-        )
-        loop = asyncio.get_event_loop()
-        loop.create_task(on_output(ujson.dumps(res), output_topics_${textId}))
-        inputs_${textId} = []
-        topics_${textId} = []
-    
-    return\n`;
+      let code = eval('`\n' + loadCode('and.pyjs', node) + '\n`');
 
       return code;
     }
+    /* eslint-enable no-unused-vars */
   }
   RED.nodes.registerType("and", AndNode);
 };

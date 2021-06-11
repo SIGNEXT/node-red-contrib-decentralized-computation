@@ -1,7 +1,18 @@
 module.exports = function (RED) {
-  "use strict";
-
   const DeviceHandler = require("devicehandler");
+  const fs = require('fs');
+
+  function loadCode(filename, node){
+    try {
+        let data = fs.readFileSync(__dirname + "/" + filename, 'utf8');  
+        node.log(`Sucess loading ${filename}`);
+        return data;
+    } catch(err) {
+        node.log(`Error loading ${filename}:${err}`);
+    }
+    return;
+  }
+
 
   function NothingNode(n) {
     RED.nodes.createNode(this, n);
@@ -19,6 +30,7 @@ module.exports = function (RED) {
     node.brokerConn && node.brokerConn.register(node);
 
     this.generateCode = true;
+    // eslint-disable-next-line no-unused-vars
     const inputTopic = `${node.id.replace(".", "")}_input`;
     this.deviceHandler = new DeviceHandler(
       node,
@@ -44,20 +56,15 @@ module.exports = function (RED) {
      * @param {*} rules
      */
     function generateMicropythonCode() {
+      // eslint-disable-next-line no-unused-vars
       const textId = node.id.replace(".", "");
+      // eslint-disable-next-line no-unused-vars
       const outputTopics = node.wires
         .map((inner) => inner.map((n) => `${n.replace(".", "")}_input`))
         .flat();
-      const code = `\n
-input_topics = ["${inputTopic}"]
-output_topics = [${outputTopics.map((a) => `"${a}"`)}]
-
-def on_input_${textId}(topic, msg, retained):
-    # print(msg)
-    loop = asyncio.get_event_loop()
-    loop.create_task(on_output(msg, output_topics))
-    return\n`;
-
+      
+      const code = eval('`\n' + loadCode('nop.pyjs', node) + '\n`');
+     
       return code;
     }
   }
