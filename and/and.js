@@ -1,84 +1,87 @@
-
-
 module.exports = function (RED) {
+  const DeviceHandler = require("devicehandler");
 
-    const DeviceHandler = require('devicehandler')
+  function AndNode(n) {
+    RED.nodes.createNode(this, n);
+    const node = this;
+    this.name = n.name;
+    this.property = n.property;
+    this.propertyType = n.propertyType || "msg";
+    this.count = parseInt(n.count);
 
-    function AndNode(n) {
-        RED.nodes.createNode(this, n);
-        const node = this;
-        this.name = n.name;
-        this.property = n.property;
-        this.propertyType = n.propertyType || "msg";
-        this.count = parseInt(n.count);
-        
-        this.predicates = n.predicates.length === 0 ? [] : n.predicates.split(" "); 
-        this.priorities = n.priorities.length === 0 ? [] : n.priorities.split(" "); 
+    this.predicates = n.predicates.length === 0 ? [] : n.predicates.split(" ");
+    this.priorities = n.priorities.length === 0 ? [] : n.priorities.split(" ");
 
+    this.broker = n.broker || this.brokerUrl;
+    this.brokerConn =
+      this.broker !== undefined ? RED.nodes.getNode(this.broker) : null;
+    node.brokerConn && node.brokerConn.register(node);
 
-        this.broker = n.broker || this.brokerUrl;
-        this.brokerConn = this.broker !== undefined ? RED.nodes.getNode(this.broker) : null;
-        node.brokerConn && node.brokerConn.register(node);
+    this.generateCode = true;
+    this.deviceHandler = new DeviceHandler(
+      node,
+      this.brokerConn,
+      generateMicropythonCode(this.property, this.count)
+    );
+    this.deviceHandler.setProxyCallback(sendReading);
 
+    function sendReading(msg) {
+      node.send(msg);
+    }
 
-        this.generateCode = true;
-        this.deviceHandler = new DeviceHandler(node, this.brokerConn, generateMicropythonCode(this.property, this.count))
-        this.deviceHandler.setProxyCallback(sendReading);
+    this.topics = [];
+    this.inputs = [];
 
-        function sendReading(msg) {
-            node.send(msg);
+    this.on("input", function (msg, done) {
+      try {
+        const value = RED.util.getMessageProperty(msg, this.property);
+
+        if (
+          Object.prototype.hasOwnProperty.call(msg, "node_id") &&
+          this.topics.indexOf(msg.node_id) === -1
+        ) {
+          this.inputs.push(value);
+          this.topics.push(msg.topic);
         }
 
-        this.topics = []
-        this.inputs = [];
+        if (this.topics.length === this.count) {
+          let result = true;
+          for (let i = 0; i < this.inputs.length; i++) {
+            result = result && this.inputs[i];
+          }
 
-        this.on("input", function (msg, done) {
-            try {
-                const value = RED.util.getMessageProperty(msg, this.property);
+          const msg = { payload: result };
+          node.send(msg);
 
-                if (Object.prototype.hasOwnProperty.call(msg, "node_id") && this.topics.indexOf(msg.node_id) === -1) {
-                    this.inputs.push(value);
-                    this.topics.push(msg.topic);
-                }
+          this.topics = [];
+          this.inputs = [];
+        }
+      } catch (err) {
+        done(JSON.stringify(err));
+      }
+    });
+    this.on("close", function () {
+      this.status({});
+    });
 
-                if (this.topics.length === this.count) {
-                    let result = true;
-                    for (let i = 0; i < this.inputs.length; i++) {
-                        result = result && this.inputs[i];
-                    }
+    generateMicropythonCode(this.property, this.count);
 
-                    const msg = { payload: result };
-                    node.send(msg);
+    /**
+     * [MINE]
+     *
+     * Generates micropython code that exxecutes the switch behaviour
+     *
+     * @param {*} rules
+     */
+    function generateMicropythonCode(property, count) {
+      const textId = node.id.replace(".", "");
+      const outputTopics = node.wires
+        .map((inner) => inner.map((n) => `${n.replace(".", "")}_input`))
+        .flat();
+      const inputTopic = `${node.id.replace(".", "")}_input`;
 
-                    this.topics = [];
-                    this.inputs = [];
-                }
-            } catch (err) {
-                done(JSON.stringify(err));
-            }
-        });
-        this.on("close", function () {
-            this.status({});
-        });
-
-        generateMicropythonCode(this.property, this.count);
-
-        /**
-         * [MINE]
-         * 
-         * Generates micropython code that exxecutes the switch behaviour
-         * 
-         * @param {*} rules 
-         */
-        function generateMicropythonCode(property, count) {
-
-            const textId = node.id.replace(".", "")
-            const outputTopics = node.wires.map(inner => inner.map(n => `${n.replace(".", "")}_input`)).flat();
-            const inputTopic = `${node.id.replace(".", "")}_input`;
-
-            const code =
-                `\ninput_topics = ["${inputTopic}"]
-output_topics_${textId} = [${outputTopics.map(a => `"${a}"`)}]
+      const code = `\ninput_topics = ["${inputTopic}"]
+output_topics_${textId} = [${outputTopics.map((a) => `"${a}"`)}]
 nr_inputs_${textId} = ${count}
 property_${textId} = "${property}"
 inputs_${textId} = []
@@ -131,11 +134,10 @@ def on_input_${textId}(topic, msg, retained):
         inputs_${textId} = []
         topics_${textId} = []
     
-    return\n`
+    return\n`;
 
-        return code;
-        }
-
+      return code;
     }
-    RED.nodes.registerType("and", AndNode);
+  }
+  RED.nodes.registerType("and", AndNode);
 };

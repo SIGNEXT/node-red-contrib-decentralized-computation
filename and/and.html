@@ -1,66 +1,80 @@
-
 <script type="text/html" data-template-name="and">
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-name"></div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <div style="display: inline-block; width: calc(100% - 105px)">
+      <input type="text" id="node-input-name" />
     </div>
-    <div class="form-row">
-        <label for="node-input-broker"><i class="fa fa-globe"></i> MQTT Broker</label>
-        <input type="text" id="node-input-broker">
+  </div>
+  <div class="form-row">
+    <label for="node-input-broker"
+      ><i class="fa fa-globe"></i> MQTT Broker</label
+    >
+    <input type="text" id="node-input-broker" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-property"
+      ><i class="fa fa-ellipsis-h"></i> Property</label
+    >
+    <input type="text" id="node-input-property" style="width: 70%" />
+    <input type="hidden" id="node-input-outputs" />
+  </div>
+  <div class="form-row" style="margin-bottom: 0px">
+    <label for="node-input-tags">Node Predicates (separate by space)</label>
+    <div style="display: inline-block; width: calc(100% - 105px)">
+      <input type="text" id="node-input-predicates" />
     </div>
-    <div class="form-row">
-        <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> Property</label>
-        <input type="text" id="node-input-property" style="width: 70%"/>
-        <input type="hidden" id="node-input-outputs"/>
+  </div>
+  <div class="form-row" style="margin-bottom: 0px">
+    <label for="node-input-tags">Node Priorities (separate by space)</label>
+    <div style="display: inline-block; width: calc(100% - 105px)">
+      <input type="text" id="node-input-priorities" />
     </div>
-    <div class="form-row" style="margin-bottom: 0px">
-        <label for="node-input-tags">Node Predicates (separate by space)</label>
-        <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-predicates"></div>
+  </div>
+  <div class="form-row" style="margin-bottom: 0px">
+    <label for="node-input-count">Inputs (count)</label>
+    <div style="display: inline-block; width: calc(100% - 105px)">
+      <input type="text" id="node-input-count" />
     </div>
-    <div class="form-row" style="margin-bottom: 0px">
-        <label for="node-input-tags">Node Priorities (separate by space)</label>
-        <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-priorities"></div>
-    </div>
-    <div class="form-row" style="margin-bottom: 0px">
-        <label for="node-input-count">Inputs (count)</label>
-        <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-count"></div>
-    </div>
+  </div>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('and', {
-        color: "#fdd0a2",
-        category: 'micropython',
-        defaults: {
-            name: { value: "" },
-            property: {value:"payload", required:true, validate: RED.validators.typedInput("propertyType")},
-            propertyType: { value:"msg" },
-            count: { value: "", required:true,validate:RED.validators.number() },
-            predicates: { value: "" },
-            broker: { type: "mqtt-broker", required: false },
-            priorities: { value: "micropython" }
-        },
-        inputs: 1,
-        outputs: 1,
-        icon: "join.svg",
-        label: function () {
-            return this.name || this._("and.and");
-        },
-        labelStyle: function () {
-            return this.name ? "node_label_italic" : "";
-        },
-        oneditprepare: function () {
-            var that = this;
-            $("#node-input-property").typedInput({default:this.propertyType||'msg',types:['msg','flow','global','jsonata','env']});
-        },
-        oneditsave: function () {
-            this.propertyType = $("#node-input-property").typedInput('type');
-        },
-        oneditcancel: function () {
-
-        },
-        oneditresize: function (size) {
-
-        }
-    });
+  RED.nodes.registerType("and", {
+    color: "#fdd0a2",
+    category: "micropython",
+    defaults: {
+      name: { value: "" },
+      property: {
+        value: "payload",
+        required: true,
+        validate: RED.validators.typedInput("propertyType"),
+      },
+      propertyType: { value: "msg" },
+      count: { value: "", required: true, validate: RED.validators.number() },
+      predicates: { value: "" },
+      broker: { type: "mqtt-broker", required: false },
+      priorities: { value: "micropython" },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "join.svg",
+    label: function () {
+      return this.name || this._("and.and");
+    },
+    labelStyle: function () {
+      return this.name ? "node_label_italic" : "";
+    },
+    oneditprepare: function () {
+      var that = this;
+      $("#node-input-property").typedInput({
+        default: this.propertyType || "msg",
+        types: ["msg", "flow", "global", "jsonata", "env"],
+      });
+    },
+    oneditsave: function () {
+      this.propertyType = $("#node-input-property").typedInput("type");
+    },
+    oneditcancel: function () {},
+    oneditresize: function (size) {},
+  });
 </script>
