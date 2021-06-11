@@ -1,8 +1,7 @@
 
 
  module.exports = function (RED) {
-    "use strict";
-
+     
     const axios = require('axios');
 
     function OrchestratorNode(n) {
@@ -97,7 +96,7 @@
 
                 const deviceId = topic.substring(topic.lastIndexOf('/') + 1);
 
-                if (devices.hasOwnProperty(deviceId)) {
+                if (Object.prototype.hasOwnProperty.call(devices, "deviceId")) {
 
                     // if it was already marked as failed, ignore
                     if (devices[deviceId].status === 0) {
@@ -108,7 +107,7 @@
                 }
 
                 // if the device that died has no associated nodes, we do not need to re-orquestrate
-                if (nodeAssignment.hasOwnProperty(deviceId)) {
+                if (Object.prototype.hasOwnProperty.call(nodeAssignment, "deviceId")) {
                     nodeAssignment[deviceId].status = 0;
                     if (nodeAssignment[deviceId].nodes.length === 0) {
                         return;
@@ -292,6 +291,7 @@
             const assignedNodes = [];
 
             // Assign each node to a device matching the tags
+            // eslint-disable-next-line no-unused-vars
             Object.entries(nodes).forEach(async ([k, flowNode]) => {
 
                 if (!flowNode.inputTopics)
@@ -315,8 +315,8 @@
                 if (flowNode.id === node.id) {
                     return;
                 }
-                if (flowNode.type.includes("subflow") ||
-                    (!flowNode.noWiresType && flowNode.inputTopics.length === 0 && flowNode.outputTopics.length === 0)) {
+                if (flowNode.type.includes("subflow") || (!flowNode.noWiresType && flowNode.inputTopics.length === 0 && flowNode.outputTopics.length === 0)) {
+                    node.log("Do nothing since there are no connections");
                 }
 
                 // If node does not have a code generator, it only runs in node-red
@@ -390,17 +390,18 @@
             for (const deviceId in devices) {
                 // if there is a device that has no nodes associated with it,must redirect the alive message to the failure topic
                 // console.log(nodeAssignment[id].nodes.length,devices[id].status)
-                if (!nodeAssignment.hasOwnProperty(deviceId)
+                if (!Object.prototype.hasOwnProperty.call(nodeAssignment, "deviceId")
                     || !nodeAssignment[deviceId].nodes
                     || nodeAssignment[deviceId].nodes.length === 0) {
 
-                    console.log("Subscribing to alive/", deviceId);
+                    node.log("Subscribing to alive/", deviceId);
+                    // eslint-disable-next-line no-unused-vars
                     node.brokerConn.subscribe(`alive/${deviceId}`, 1, (topic, payload, packet) => {
 
                         payload = JSON.parse(payload);
 
                         if (!devices[deviceId].status) {
-                            console.log(`Received LTW from an already dead device ${topic}`)
+                            node.log(`Received LTW from an already dead device ${topic}`)
                             return;
                         }
 
@@ -423,7 +424,7 @@
 
             for (let i = 0; i < nodes_arr.length; i++) {
                 const entry = nodes_arr[i];
-                const id = entry[0];
+                //const id = entry[0];
                 const flowNode = entry[1];
 
                 if (flowNode.type === 'orchestrator' || flowNode.type === 'registry' || !flowNode.generateCode) {

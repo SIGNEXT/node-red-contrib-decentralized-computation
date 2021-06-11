@@ -1,7 +1,6 @@
 module.exports = function (RED) {
-    "use strict";
 
-    var isUtf8 = require('is-utf8');
+    const isUtf8 = require('is-utf8');
 
     function RegistryNode(n) {
         RED.nodes.createNode(this, n);

@@ -1,9 +1,9 @@
  module.exports = function (RED) {
-    "use strict";
-    var mqtt = require("mqtt");
-    var isUtf8 = require('is-utf8');
-    var HttpsProxyAgent = require('https-proxy-agent');
-    var url = require('url');
+     
+    const mqtt = require("mqtt");
+    const isUtf8 = require('is-utf8');
+    const HttpsProxyAgent = require('https-proxy-agent');
+    const url = require('url');
     const DeviceHandler = require('devicehandler')
 
     function matchTopic(ts, t) {
@@ -352,8 +352,9 @@
                     retain: msg.retain || false
                 };
                 node.client.publish(msg.topic, msg.payload, options, function (err) {
-                    done && done();
-                    return
+                    node.log(err);
+                    done();
+                    return;
                 });
             }
         };
@@ -412,7 +413,7 @@
         deviceHandler.setProxyCallback(proxyHandler);
         deviceHandler.setLocalCallback(() => {
             if (action === "forward") {
-                node.send([, { payload: "Cannot operate locally", start: true }])
+                node.send([null, { payload: "Cannot operate locally", start: true }])
             }
         })
 
@@ -512,7 +513,7 @@ def on_input_${textId}(topic, msg, retained):
         var node = this;
         const inputTopic = `${node.id.replace(".", "")}_input`;
         const deviceHandler = new DeviceHandler(node, this.brokerConn, generateMicropythonCode(node, this.topic));
-        var chk = /[\+#]/;
+        var chk = /[+#]/;
 
         if (this.brokerConn) {
             this.status({ fill: "red", shape: "ring", text: "Disconnected" });

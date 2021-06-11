@@ -1,6 +1,5 @@
 module.exports = function (RED) {
-    "use strict";
-
+    
     const DeviceHandler = require('devicehandler')
 
     function TemperatureHumidityNode(n) {

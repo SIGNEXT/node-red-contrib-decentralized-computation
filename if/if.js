@@ -1,5 +1,4 @@
 module.exports = function (RED) {
-    "use strict";
 
     const DeviceHandler = require('devicehandler')
 
@@ -293,7 +292,8 @@ module.exports = function (RED) {
             var msgsCount = msgs.length;
             if (count === msgsCount) {
                 // We have a complete group - send the individual parts
-                drainMessageGroup(msgs, count, err => {
+                drainMessageGroup(msgs, count, function(err) {
+                    node.log(err);
                     pendingCount -= msgsCount;
                     delete pendingIn[parts.id];
                     done();
