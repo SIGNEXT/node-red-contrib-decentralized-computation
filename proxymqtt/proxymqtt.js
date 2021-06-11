@@ -1,23 +1,6 @@
-/**
- * Copyright JS Foundation and other contributors, http://js.foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- **/
-
  module.exports = function (RED) {
     "use strict";
     var mqtt = require("mqtt");
-    var util = require("util");
     var isUtf8 = require('is-utf8');
     var HttpsProxyAgent = require('https-proxy-agent');
     var url = require('url');
@@ -253,7 +236,7 @@
                         node.log(RED._("mqtt.state.connected", { broker: (node.clientid ? node.clientid + "@" : "") + node.brokerurl }));
                         for (var id in node.users) {
                             if (Object.prototype.hasOwnProperty.call(node.users,"id")) {
-                                node.users[id].status({ fill: "green", shape: "dot", text: "node-red:common.status.connected" });
+                                node.users[id].status({ fill: "green", shape: "dot", text: "Connected" });
                             }
                         }
                         // Remove any existing listeners before resubscribing to avoid duplicates in the event of a re-connection
@@ -283,7 +266,7 @@
                     node.client.on("reconnect", function () {
                         for (var id in node.users) {
                             if (Object.prototype.hasOwnProperty.call(node.users,"id")) {
-                                node.users[id].status({ fill: "yellow", shape: "ring", text: "node-red:common.status.connecting" });
+                                node.users[id].status({ fill: "yellow", shape: "ring", text: "Connecting" });
                             }
                         }
                     })
@@ -294,7 +277,7 @@
                             node.log(RED._("mqtt.state.disconnected", { broker: (node.clientid ? node.clientid + "@" : "") + node.brokerurl }));
                             for (var id in node.users) {
                                 if (Object.prototype.hasOwnProperty.call(node.users,"id")) {
-                                    node.users[id].status({ fill: "red", shape: "ring", text: "node-red:common.status.disconnected" });
+                                    node.users[id].status({ fill: "red", shape: "ring", text: "Disconnected" });
                                 }
                             }
                         } else if (node.connecting) {
@@ -434,7 +417,7 @@
         })
 
         if (this.brokerConn && action === "local") {
-            this.status({ fill: "red", shape: "ring", text: "node-red:common.status.disconnected" });
+            this.status({ fill: "red", shape: "ring", text: "Disconnected" });
             if (this.topic) {
                 node.brokerConn.register(this);
                 this.brokerConn.subscribe(this.topic, this.qos, function (topic, payload, packet) {
@@ -464,7 +447,7 @@
                     }
                 }, this.id);
                 if (this.brokerConn.connected) {
-                    node.status({ fill: "green", shape: "dot", text: "node-red:common.status.connected" });
+                    node.status({ fill: "green", shape: "dot", text: "Connected" });
                 }
             }
             else {
@@ -532,7 +515,7 @@ def on_input_${textId}(topic, msg, retained):
         var chk = /[\+#]/;
 
         if (this.brokerConn) {
-            this.status({ fill: "red", shape: "ring", text: "node-red:common.status.disconnected" });
+            this.status({ fill: "red", shape: "ring", text: "Disconnected" });
             this.on("input", function (msg, send, done) {
                 if (msg.qos) {
                     msg.qos = parseInt(msg.qos);
@@ -576,7 +559,7 @@ def on_input_${textId}(topic, msg, retained):
                 }
             });
             if (this.brokerConn.connected) {
-                node.status({ fill: "green", shape: "dot", text: "node-red:common.status.connected" });
+                node.status({ fill: "green", shape: "dot", text: "Connected" });
             }
             node.brokerConn.register(node);
             this.on('close', function (done) {
