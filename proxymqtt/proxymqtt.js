@@ -1,5 +1,5 @@
 module.exports = function (RED) {
-  const mqtt = require("mqtt");
+  //const mqtt = require("mqtt");
   const isUtf8 = require("is-utf8");
   const HttpsProxyAgent = require("https-proxy-agent");
   const url = require("url");

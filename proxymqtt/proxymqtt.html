@@ -61,7 +61,7 @@
 
 <script type="text/javascript">
   RED.nodes.registerType("proxy mqtt in", {
-    category: "orchestrator",
+    category: "micropython",
     defaults: {
       name: { value: "" },
       topic: {
@@ -139,7 +139,7 @@
 
 <script type="text/javascript">
   RED.nodes.registerType("proxy mqtt out", {
-    category: "network",
+    category: "micropython",
     defaults: {
       name: { value: "" },
       topic: { value: "" },
@@ -491,7 +491,7 @@
 
 <script type="text/javascript">
   RED.nodes.registerType("mqtt-broker", {
-    category: "config",
+    category: "micropython",
     defaults: {
       name: { value: "" },
       broker: { value: "", required: true },

@@ -5,7 +5,8 @@
   "dependencies": {
     "axios": "^0.21.1",
     "devicehandler": "file:./devicehandler",
-    "is-utf8": "0.2.1"
+    "is-utf8": "0.2.1",
+    "https-proxy-agent": "*"
   },
   "devDependencies": {
     "mqtt": "^4.2.6",

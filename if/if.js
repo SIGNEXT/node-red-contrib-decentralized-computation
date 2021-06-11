@@ -1,5 +1,5 @@
 module.exports = function (RED) {
-  const DeviceHandler = require("devicehandler");
+  var DeviceHandler = require("devicehandler");
 
   var operators = {
     eq: function (a, b) {
