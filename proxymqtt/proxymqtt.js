@@ -1,5 +1,5 @@
 module.exports = function (RED) {
-  //const mqtt = require("mqtt");
+  const mqtt = require("mqtt");
   const isUtf8 = require("is-utf8");
   const HttpsProxyAgent = require("https-proxy-agent");
   const url = require("url");
@@ -9,7 +9,7 @@ module.exports = function (RED) {
     if (ts == "#") {
       return true;
     } else if (ts.startsWith("$share")) {
-    /* The following allows shared subscriptions (as in MQTT v5)
+      /* The following allows shared subscriptions (as in MQTT v5)
            http://docs.oasis-open.org/mqtt/mqtt/v5.0/cs02/mqtt-v5.0-cs02.html#_Toc514345522
 
            4.8.2 describes shares like:
@@ -20,11 +20,10 @@ module.exports = function (RED) {
         */
       ts = ts.replace(/^\$share\/[^#+/]+\/(.*)/g, "$1");
     }
-    // eslint-disable-next-line no-useless-escape
     var re = new RegExp(
       "^" +
         ts
-          .replace(/([\[\]\?\(\)\\\\$\^\*\.|])/g, "\\$1")
+          .replace(/([[\]?()\\\\$^*.|])/g, "\\$1")
           .replace(/\+/g, "[^/]+")
           .replace(/\/#$/, "(/.*)?") +
         "$"

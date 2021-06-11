@@ -96,10 +96,11 @@ class DeviceHandler {
           });
           return;
         }
-        // eslint-disable-next-line no-unused-vars
+
         this.brokerConn.subscribe(
           `ping/${this.device.id}`,
           2,
+          // eslint-disable-next-line no-unused-vars
           (topic, payload, packet) => {
             payload = JSON.parse(payload);
             if (this.device && this.device.id === payload.deviceId) {

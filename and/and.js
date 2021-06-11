@@ -1,5 +1,5 @@
 module.exports = function (RED) {
-  const DeviceHandler = require('devicehandler');
+  const DeviceHandler = require("devicehandler");
 
   function AndNode(n) {
     RED.nodes.createNode(this, n);

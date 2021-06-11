@@ -85,10 +85,10 @@ module.exports = function (RED) {
     sendTelemetryData();
 
     try {
-      // eslint-disable-next-line no-unused-vars
       node.brokerConn.subscribe(
         "/failure/+",
         2,
+        // eslint-disable-next-line no-unused-vars
         async (topic, payload, packet) => {
           while (assigning) {
             await sleep(500);
@@ -456,10 +456,11 @@ module.exports = function (RED) {
           nodeAssignment[deviceId].nodes.length === 0
         ) {
           node.log("Subscribing to alive/", deviceId);
-          // eslint-disable-next-line no-unused-vars
+
           node.brokerConn.subscribe(
             `alive/${deviceId}`,
             1,
+            // eslint-disable-next-line no-unused-vars
             (topic, payload, packet) => {
               payload = JSON.parse(payload);
 
