@@ -8,7 +8,7 @@ module.exports = function (RED) {
         node.log(`Sucess loading ${filename}`);
         return data;
     } catch(err) {
-        node.log(`Error loading ${filename}:${err}`);
+        node.error(`Error loading ${filename}:${err}`);
     }
     return;
   }

@@ -8,7 +8,7 @@ module.exports = function (RED) {
         node.log(`Sucess loading ${filename}`);
         return data;
     } catch(err) {
-        node.log(`Error loading ${filename}:${err}`);
+        node.error(`Error loading ${filename}:${err}`);
     }
     return;
   }
@@ -349,7 +349,7 @@ module.exports = function (RED) {
       if (count === msgsCount) {
         // We have a complete group - send the individual parts
         drainMessageGroup(msgs, count, function (err) {
-          node.log(err);
+          node.error(err);
           pendingCount -= msgsCount;
           delete pendingIn[parts.id];
           done();
