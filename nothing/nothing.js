@@ -1,18 +1,17 @@
 module.exports = function (RED) {
   const DeviceHandler = require("devicehandler");
-  const fs = require('fs');
+  const fs = require("fs");
 
-  function loadCode(filename, node){
+  function loadCode(filename, node) {
     try {
-        let data = fs.readFileSync(__dirname + "/" + filename, 'utf8');  
-        node.log(`Sucess loading ${filename}`);
-        return data;
-    } catch(err) {
-        node.log(`Error loading ${filename}:${err}`);
+      let data = fs.readFileSync(__dirname + "/" + filename, "utf8");
+      node.log(`Sucess loading ${filename}`);
+      return data;
+    } catch (err) {
+      node.log(`Error loading ${filename}:${err}`);
     }
     return;
   }
-
 
   function NothingNode(n) {
     RED.nodes.createNode(this, n);
@@ -62,9 +61,9 @@ module.exports = function (RED) {
       const outputTopics = node.wires
         .map((inner) => inner.map((n) => `${n.replace(".", "")}_input`))
         .flat();
-      
-      const code = eval('`\n' + loadCode('nop.pyjs', node) + '\n`');
-     
+
+      const code = eval("`\n" + loadCode("nop.pyjs", node) + "\n`");
+
       return code;
     }
   }

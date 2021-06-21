@@ -5,19 +5,18 @@ module.exports = function (RED) {
   const url = require("url");
   const DeviceHandler = require("devicehandler");
 
-  const fs = require('fs');
+  const fs = require("fs");
 
-  function loadCode(filename, node){
+  function loadCode(filename, node) {
     try {
-        let data = fs.readFileSync(__dirname + "/" + filename, 'utf8');  
-        node.log(`Sucess loading ${filename}`);
-        return data;
-    } catch(err) {
-        node.log(`Error loading ${filename}:${err}`);
+      let data = fs.readFileSync(__dirname + "/" + filename, "utf8");
+      node.log(`Sucess loading ${filename}`);
+      return data;
+    } catch (err) {
+      node.log(`Error loading ${filename}:${err}`);
     }
     return;
   }
-
 
   function matchTopic(ts, t) {
     if (ts == "#") {
@@ -580,7 +579,7 @@ module.exports = function (RED) {
         .map((inner) => inner.map((n) => `${n.replace(".", "")}_input`))
         .flat();
 
-      const code = eval('`\n' + loadCode('mqttin.pyjs', node) + '\n`');
+      const code = eval("`\n" + loadCode("mqttin.pyjs", node) + "\n`");
 
       return code;
     }
@@ -671,7 +670,7 @@ module.exports = function (RED) {
     function generateMicropythonCode(node, topic) {
       // eslint-disable-next-line no-unused-vars
       const textId = node.id.replace(".", "");
-      const code = eval('`\n' + loadCode('mqttout.pyjs', node) + '\n`');
+      const code = eval("`\n" + loadCode("mqttout.pyjs", node) + "\n`");
       return code;
     }
   }
