@@ -1,14 +1,14 @@
 module.exports = function (RED) {
   const DeviceHandler = require("devicehandler");
-  const fs = require('fs');
+  const fs = require("fs");
 
-  function loadCode(filename, node){
+  function loadCode(filename, node) {
     try {
-        let data = fs.readFileSync(__dirname + "/" + filename, 'utf8');  
-        node.log(`Sucess loading ${filename}`);
-        return data;
-    } catch(err) {
-        node.log(`Error loading ${filename}:${err}`);
+      let data = fs.readFileSync(__dirname + "/" + filename, "utf8");
+      node.log(`Sucess loading ${filename}`);
+      return data;
+    } catch (err) {
+      node.log(`Error loading ${filename}:${err}`);
     }
     return;
   }
@@ -29,6 +29,7 @@ module.exports = function (RED) {
       this.broker !== undefined ? RED.nodes.getNode(this.broker) : null;
     node.brokerConn && node.brokerConn.register(node);
 
+    const inputTopic = `${node.id.replace(".", "")}_input`;
     this.generateCode = true;
     this.deviceHandler = new DeviceHandler(
       node,
@@ -46,27 +47,38 @@ module.exports = function (RED) {
 
     this.on("input", function (msg, done) {
       try {
-        const value = RED.util.getMessageProperty(msg, this.property);
+        const status = this.deviceHandler.getStatus();
+        if (status === "proxy" || status === "remote") {
+          msg.payload = { ...msg };
+          msg.topic = inputTopic;
+          this.brokerConn.publish(msg);
+        } else {
+          const value = RED.util.getMessageProperty(msg, this.property);
 
-        if (
-          Object.prototype.hasOwnProperty.call(msg, "node_id") &&
-          this.topics.indexOf(msg.node_id) === -1
-        ) {
-          this.inputs.push(value);
-          this.topics.push(msg.topic);
-        }
-
-        if (this.topics.length === this.count) {
-          let result = true;
-          for (let i = 0; i < this.inputs.length; i++) {
-            result = result && this.inputs[i];
+          if (
+            Object.prototype.hasOwnProperty.call(msg, "node_id") &&
+            this.topics.indexOf(msg.node_id) === -1
+          ) {
+            this.inputs.push(value);
+            this.topics.push(msg.topic);
           }
 
-          const msg = { payload: result };
-          node.send(msg);
+          if (this.topics.length === this.count) {
+            let result = true;
+            for (let i = 0; i < this.inputs.length; i++) {
+              result = result && this.inputs[i];
+            }
 
-          this.topics = [];
-          this.inputs = [];
+            const msg = {
+              payload: result,
+              node_id: node.id,
+              device_id: "node-red",
+            };
+            node.send(msg);
+
+            this.topics = [];
+            this.inputs = [];
+          }
         }
       } catch (err) {
         done(JSON.stringify(err));
@@ -93,7 +105,7 @@ module.exports = function (RED) {
         .flat();
       const inputTopic = `${node.id.replace(".", "")}_input`;
 
-      let code = eval('`\n' + loadCode('and.pyjs', node) + '\n`');
+      let code = eval("`\n" + loadCode("and.pyjs", node) + "\n`");
 
       return code;
     }
