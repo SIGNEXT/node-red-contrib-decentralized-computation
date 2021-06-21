@@ -24,7 +24,7 @@ class DeviceHandler {
         const diff = Date.now() - this.device.timestamp;
 
         if (diff > 1000 * 30) {
-          console.log(`Device ${this.device.id} dead!`);
+          node.log(`Device ${this.device.id} dead!`);
           this.device.alive = false;
           this.status = "local";
 
@@ -146,7 +146,7 @@ class DeviceHandler {
             : err.response
             ? err.response.status
             : 500;
-        this.node.log(`ERROR in sending code to server : Status ${status}`);
+        this.node.error(`ERROR in sending code to server : Status ${status}`);
         // Send telemetry to orchestrator nodes
         // node.receive({ type: "telemetry", device: address, data: { duration: Date.now() - startTime, state: 0 } });
         // return { id: nodeId, status: status }

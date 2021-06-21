@@ -348,7 +348,7 @@ module.exports = function (RED) {
       if (count === msgsCount) {
         // We have a complete group - send the individual parts
         drainMessageGroup(msgs, count, function (err) {
-          node.log(err);
+          node.error(err);
           pendingCount -= msgsCount;
           delete pendingIn[parts.id];
           done();

@@ -346,7 +346,7 @@ module.exports = function (RED) {
                 }
               }
             } else if (node.connecting) {
-              node.log(
+              node.error(
                 RED._("mqtt.state.connect-failed", {
                   broker:
                     (node.clientid ? node.clientid + "@" : "") + node.brokerurl,
@@ -358,10 +358,10 @@ module.exports = function (RED) {
           // Register connect error handler
           // The client's own reconnect logic will take care of errors
           node.client.on("error", function (error) {
-            console.log(error);
+            node.error(error);
           });
         } catch (err) {
-          node.log(err);
+          node.error(err);
         }
       }
     };
@@ -424,7 +424,7 @@ module.exports = function (RED) {
           retain: msg.retain || false,
         };
         node.client.publish(msg.topic, msg.payload, options, function (err) {
-          node.log(err);
+          node.error(err);
           done();
           return;
         });

@@ -123,12 +123,12 @@ module.exports = function (RED) {
           distributeFlow(nodes, changes);
         }
       );
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      node.error(err);
     }
 
     setTimeout(() => {
-      console.log(doLocalDistribution);
+      node.log(doLocalDistribution);
       if (doLocalDistribution) {
         const nodes = node._flow.activeNodes;
         const changes = {};
@@ -565,7 +565,7 @@ module.exports = function (RED) {
         try {
           node.brokerConn.publish(msg);
         } catch (e) {
-          console.log("Error");
+          node.error(e);
         }
       }, 1 * 1000);
     }
@@ -601,7 +601,7 @@ module.exports = function (RED) {
           node.brokerConn.publish(telemetry_msg);
           node.brokerConn.publish(nodes_msg);
         } catch (e) {
-          console.log("Error");
+          node.error(e);
         }
       }, 5 * 1000);
     }
