@@ -1,0 +1,70 @@
+<script type="text/html" data-template-name="registry">
+  <div class="form-row">
+      <label for="node-input-broker"><i class="fa fa-globe"></i>MQTT Server</label>
+      <input type="text" id="node-input-broker">
+  </div>
+  <div class="form-row">
+      <label for="node-input-topic"><i class="fa fa-tasks"></i>Topic</label>
+      <input type="text" id="node-input-topic" placeholder="topic/">
+  </div>
+  <div class="form-row">
+      <label for="node-input-qos"><i class="fa fa-empire"></i>QoS</label>
+      <select id="node-input-qos" style="width:125px !important">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+      </select>
+  </div>
+  <div class="form-row">
+      <label for="node-input-datatype"><i class="fa fa-sign-out"></i>Output</span></label>
+      <select id="node-input-datatype" style="width:70%;">
+          <option value="auto">auto-detect (string or buffer)</option>
+          <option value="buffer">a Buffer</option>
+          <option value="utf8">a String</option>
+          <option value="json">a parsed JSON object</option>
+          <option value="base64">a Base64 encoded string</option>
+      </select>
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name">
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType("registry", {
+    category: "orchestrator",
+    defaults: {
+      name: { value: "" },
+      topic: {
+        value: "announcements/+",
+        required: true,
+        validate: RED.validators.regex(
+          /^(#$|(\+|[^+#]*)(\/(\+|[^+#]*))*(\/(\+|#|[^+#]*))?$)/
+        ),
+      },
+      qos: { value: "2" },
+      retain: { value: true },
+      datatype: { value: "json", required: true },
+      broker: { type: "mqtt-broker", required: true },
+    },
+    color: "#d8bfd8",
+    inputs: 0,
+    outputs: 1,
+    icon: "bridge.svg",
+    label: function () {
+      return this.name || "registry";
+    },
+    labelStyle: function () {
+      return this.name ? "node_label_italic" : "";
+    },
+    oneditprepare: function () {
+      if (this.qos === undefined) {
+        $("#node-input-qos").val("2");
+      }
+      if (this.datatype === undefined) {
+        $("#node-input-datatype").val("json");
+      }
+    },
+  });
+</script>

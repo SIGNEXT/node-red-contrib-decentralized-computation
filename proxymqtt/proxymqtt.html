@@ -1,0 +1,151 @@
+<script type="text/x-red" data-template-name="proxy mqtt in">
+  <div class="form-row">
+      <label for="node-input-broker"><i class="fa fa-globe"></i> MQTT Broker</label>
+      <input type="text" id="node-input-broker">
+  </div>
+  <div class="form-row">
+      <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</span></label>
+      <input type="text" id="node-input-topic" placeholder="topic/">
+  </div>
+  <div class="form-row" style="margin-bottom: 0px">
+      <label for="node-input-predicates">Node Predicates (separate by space)</label>
+      <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-predicates"></div>
+  </div>
+  <div class="form-row" style="margin-bottom: 0px">
+      <label for="node-input-priorities">Node Priorities (separate by space)</label>
+      <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-priorities"></div>
+  </div>
+  <div class="form-row">
+      <label for="node-input-qos"><i class="fa fa-empire"></i>QoS</label>
+      <select id="node-input-qos" style="width:125px !important">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+      </select>
+  </div>
+  <div class="form-row">
+      <label for="node-input-datatype"><i class="fa fa-sign-out"></i>Output</label>
+      <select id="node-input-datatype" style="width:70%;">
+          <option value="auto">auto-detect (string or buffer)</option>
+          <option value="buffer">a Buffer</option>
+          <option value="utf8">a String</option>
+          <option value="json">a parsed JSON object</option>
+          <option value="base64">a Base64 encoded string</option>
+      </select>
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i>Name</label>
+      <input type="text" id="node-input-name">
+  </div>
+  <div class="form-row" >
+      <label for="node-input-action"><i class="fa fa-tasks"></i>Fallback Action</label>
+      <select id="node-input-action" style="width:270px !important">
+          <option value="local">Execute locally if remote not available</option>
+          <option value="forward"> Send error message</option>
+      </select>
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType("proxy mqtt in", {
+    category: "micropython",
+    defaults: {
+      name: { value: "" },
+      topic: {
+        value: "",
+        required: true,
+        validate: RED.validators.regex(
+          /^(#$|(\+|[^+#]*)(\/(\+|[^+#]*))*(\/(\+|#|[^+#]*))?$)/
+        ),
+      },
+      qos: { value: "2" },
+      datatype: { value: "auto", required: true },
+      broker: { type: "mqtt-broker", required: true },
+      predicates: { value: "" },
+      priorities: { value: "micropython" },
+      action: { value: "local" },
+    },
+    color: "#d8bfd8",
+    inputs: 0,
+    outputs: 2,
+    icon: "bridge.svg",
+    label: function () {
+      return this.name || "proxy-mqtt-in";
+    },
+    labelStyle: function () {
+      return this.name ? "node_label_italic" : "";
+    },
+    oneditprepare: function () {
+      if (this.qos === undefined) {
+        $("#node-input-qos").val("2");
+      }
+      if (this.datatype === undefined) {
+        $("#node-input-datatype").val("auto");
+      }
+    },
+  });
+</script>
+
+<script type="text/x-red" data-template-name="proxy mqtt out">
+  <div class="form-row">
+      <label for="node-input-broker"><i class="fa fa-globe"></i> MQTT broker</label>
+      <input type="text" id="node-input-broker">
+  </div>
+  <div class="form-row">
+      <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</label>
+      <input type="text" id="node-input-topic" placeholder="topic/">
+  </div>
+  <div class="form-row" style="margin-bottom: 0px">
+      <label for="node-input-predicates">Node Predicates (separate by space)</label>
+      <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-predicates"></div>
+  </div>
+  <div class="form-row" style="margin-bottom: 0px">
+      <label for="node-input-priorities">Node Priorities (separate by space)</label>
+      <div style="display: inline-block; width: calc(100% - 105px)"><input type="text" id="node-input-priorities"></div>
+  </div>
+  <div class="form-row">
+      <label for="node-input-qos"><i class="fa fa-empire"></i> QoS</label>
+      <select id="node-input-qos" style="width:125px !important">
+          <option value=""></option>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+      </select>
+      &nbsp;&nbsp;<i class="fa fa-history"></i>&nbsp;MQTT Retain &nbsp;<select id="node-input-retain" style="width:125px !important">
+          <option value=""></option>
+          <option value="false">False</option>
+          <option value="true">True</option>
+      </select>
+  </div>
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-input-name">
+  </div>
+  <div class="form-tips">Tip: Leave topic, qos or retain blank if you want to set them via msg properties.</div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType("proxy mqtt out", {
+    category: "micropython",
+    defaults: {
+      name: { value: "" },
+      topic: { value: "" },
+      qos: { value: "" },
+      retain: { value: "" },
+      broker: { type: "mqtt-broker", required: true },
+      predicates: { value: "" },
+      priorities: { value: "micropython" },
+    },
+    color: "#d8bfd8",
+    inputs: 1,
+    outputs: 0,
+    icon: "bridge.svg",
+    align: "right",
+    label: function () {
+      return this.name || "proxy-mqtt-out";
+    },
+    labelStyle: function () {
+      return this.name ? "node_label_italic" : "";
+    },
+  });
+</script>

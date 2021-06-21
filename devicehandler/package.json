@@ -1,0 +1,14 @@
+{
+  "name": "devicehandler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "devicehandler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^0.20.0"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,8 @@
+input_topics = ["${inputTopic}"]
+output_topics = [${outputTopics.map((a) => `"${a}"`)}]
+
+def on_input_${textId}(topic, msg, retained):
+    # print(msg)
+    loop = asyncio.get_event_loop()
+    loop.create_task(on_output(msg, output_topics))
+    return
