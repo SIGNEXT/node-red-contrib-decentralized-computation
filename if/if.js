@@ -1,18 +1,17 @@
 module.exports = function (RED) {
   var DeviceHandler = require("devicehandler");
-  const fs = require('fs');
+  const fs = require("fs");
 
-  function loadCode(filename, node){
+  function loadCode(filename, node) {
     try {
-        let data = fs.readFileSync(__dirname + "/" + filename, 'utf8');  
-        node.log(`Sucess loading ${filename}`);
-        return data;
-    } catch(err) {
-        node.log(`Error loading ${filename}:${err}`);
+      let data = fs.readFileSync(__dirname + "/" + filename, "utf8");
+      node.log(`Sucess loading ${filename}`);
+      return data;
+    } catch (err) {
+      node.log(`Error loading ${filename}:${err}`);
     }
     return;
   }
-
 
   var operators = {
     eq: function (a, b) {
@@ -383,7 +382,11 @@ module.exports = function (RED) {
                 if (err) {
                   node.warn(err);
                 } else {
-                  const newMsg = { ...msg, payload: result };
+                  const newMsg = {
+                    payload: result,
+                    node_id: node.id,
+                    device_id: "node-red",
+                  };
                   node.send(newMsg);
                 }
                 done();
@@ -510,7 +513,7 @@ module.exports = function (RED) {
 
       ifBlock += `def if_function_${textId}(a):\n    res = ${rulesBlock}\n    return '%s' % res`;
 
-      let code = eval('`\n' + loadCode('if.pyjs', node) + '\n`');
+      let code = eval("`\n" + loadCode("if.pyjs", node) + "\n`");
 
       return code;
     }
