@@ -171,41 +171,33 @@ module.exports = function (RED) {
     }
 
     async function sendRank(address) {
-      let tmpRanks = {};
+      return new Promise((resolve, reject) => {
+        let tmpRanks = {};
 
-      for (const node in ranks) {
-        tmpRanks[node] = {};
-        tmpRanks[node].devices = ranks[node].map((entry, idx) => {
-          return { id: entry.id, order: idx };
-        });
-        tmpRanks[node].alive = true;
-        tmpRanks[node].timestamp = Date.now();
-      }
+        for (const node in ranks) {
+          tmpRanks[node] = {};
+          tmpRanks[node].devices = ranks[node].map((entry) => {
+            return { id: entry.id };
+          });
+        }
 
-      axios({
-        method: "POST",
-        url: `http://server:8080/assignment/${Date.now()}`,
-        data: tmpRanks,
-      });
-
-      axios({
-        method: "POST",
-        url: `http://${address}/rank`,
-        data: tmpRanks,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => {
-          // node.log(`SUCCESS in sending rank to device ${address}: Status ${res.status}`);
-          return { id: address, status: res.status };
+        axios({
+          method: "POST",
+          url: `http://${address}/rank`,
+          data: tmpRanks,
+          headers: {
+            "Content-Type": "application/json",
+          },
         })
-        .catch((err) => {
-          node.log(
-            `ERROR in sending rank to device ${address}: Status ${err.status}`
-          );
-          return { id: address };
-        });
+          .then((res) => {
+            // node.log(`SUCCESS in sending rank to device ${address}: Status ${res.status}`);
+            resolve({ id: address, status: res.status });
+          })
+          .catch((err) => {
+            // node.log(`ERROR in sending rank to device ${address}: Status ${err.status}`);
+            reject({ id: address, status: err.status });
+          });
+      });
     }
 
     /**
@@ -440,13 +432,6 @@ module.exports = function (RED) {
         }
       }
 
-      // for (const id in nodeAssignment) {
-      //     console.log("ID: ", id);
-      //     nodeAssignment[id].nodes.forEach(node => {
-      //         console.log("\tNode type: ", node.type)
-      //     });
-      // }
-
       for (const deviceId in devices) {
         // if there is a device that has no nodes associated with it,must redirect the alive message to the failure topic
         // console.log(nodeAssignment[id].nodes.length,devices[id].status)
@@ -489,7 +474,7 @@ module.exports = function (RED) {
 
       for (let i = 0; i < nodes_arr.length; i++) {
         const entry = nodes_arr[i];
-        //const id = entry[0];
+        // const id = entry[0];
         const flowNode = entry[1];
 
         if (
@@ -546,8 +531,16 @@ module.exports = function (RED) {
 
       await Promise.all(promises);
 
+      const promises_ranks = [];
+
       for (const id in devices) {
-        sendRank(id);
+        promises_ranks.push(sendRank(id));
+      }
+
+      try {
+        await Promise.all(promises_ranks);
+      } catch (e) {
+        console.log(e);
       }
 
       // if (Object.keys(nodeAssignment).length > 0) {
