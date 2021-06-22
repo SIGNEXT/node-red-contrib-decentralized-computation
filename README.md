@@ -1,6 +1,6 @@
 # node-red-contrib-decentralized-computation
 
-Decentralized Computation extensions for Node-RED. 
+Decentralized Computation extensions for Node-RED.
 
 This package provides a platform to distribute the computation of Node-RED flows across edge devices. It introduces an Orchestrator node capable of decomposing and allocating the nodes to multiple IoT devices. Each node is capable of generating its own Micropython code that is to be installed in the edge device running a custom-made firmware.
 
@@ -19,7 +19,6 @@ This work is part of a master thesis in Software Engineering and Internet-of-Thi
   <figcaption>Example flow containing two temperature nodes that can trigger the AC to turn on. If the temperature sensor fails, Node-RED can replace its data by querying a Weather API. </figcaption>
 </figure>
 
-
 ## Development
 
 - Installing Node-RED (Official Docs): [https://nodered.org/docs/getting-started/](https://nodered.org/docs/getting-started/)
@@ -30,7 +29,6 @@ This work is part of a master thesis in Software Engineering and Internet-of-Thi
 - In your node-red user directory, typically ~/.node-red (in Windows something like `C:\Users\<my_name>\.node_red`), run: `npm install <path_to_downloaded_folder>/node-red-contrib-decentralized-computation`
 - Start (or restart) Node-RED.
 - Nodes should be available under the `orchestrator` and `micropython` tabs of the _node palette_.
-
 
 ### Helper documentation
 
