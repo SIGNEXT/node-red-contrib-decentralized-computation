@@ -1,0 +1,862 @@
+[
+  {
+    "id": "c63f3fac.045c4",
+    "type": "tab",
+    "label": "Flow 1",
+    "disabled": true,
+    "info": ""
+  },
+  {
+    "id": "7368d992.c816b8",
+    "type": "temperature-humidity",
+    "z": "c63f3fac.045c4",
+    "name": "",
+    "pin": "12",
+    "predicates": "temperature humidity micropython",
+    "priorities": "",
+    "repeat": true,
+    "interval": "5000",
+    "broker": "df6cc1b7.0e642",
+    "action": "local",
+    "x": 270,
+    "y": 200,
+    "wires": [
+      [
+        "f4a27cc0.f8ca38",
+        "d251f13a.cd9288",
+        "fe9f33aa.8384d",
+        "8e00b864.e8ec68",
+        "58d46e4c.fedee8",
+        "59dd31fb.e2cbb8"
+      ],
+      ["cdb6a83b.5d5e08"]
+    ]
+  },
+  {
+    "id": "c11b5840.ec76e",
+    "type": "registry",
+    "z": "c63f3fac.045c4",
+    "name": "",
+    "topic": "announcements/+",
+    "qos": "2",
+    "retain": true,
+    "datatype": "json",
+    "broker": "df6cc1b7.0e642",
+    "x": 550,
+    "y": 20,
+    "wires": [["95d29b0a.b84278"]]
+  },
+  {
+    "id": "95d29b0a.b84278",
+    "type": "orchestrator",
+    "z": "c63f3fac.045c4",
+    "name": "",
+    "topic": "result",
+    "qos": "",
+    "retain": "",
+    "broker": "df6cc1b7.0e642",
+    "x": 720,
+    "y": 20,
+    "wires": [[]]
+  },
+  {
+    "id": "f4a27cc0.f8ca38",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "tmp >= 30",
+    "property": "payload.temperature",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "30",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 720,
+    "y": 100,
+    "wires": [["8aa15bfd.af1a48"]]
+  },
+  {
+    "id": "d251f13a.cd9288",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "hum >= 30",
+    "property": "payload.humidity",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "30",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 730,
+    "y": 140,
+    "wires": [["8aa15bfd.af1a48"]]
+  },
+  {
+    "id": "fe9f33aa.8384d",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "tmp <= 10",
+    "property": "payload.temperature",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "lte",
+        "v": "10",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 720,
+    "y": 180,
+    "wires": [["2f3f4b87.e76e7c"]]
+  },
+  {
+    "id": "8e00b864.e8ec68",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "hum <= 10",
+    "property": "payload.humidity",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "lte",
+        "v": "10",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 730,
+    "y": 220,
+    "wires": [["2f3f4b87.e76e7c"]]
+  },
+  {
+    "id": "58d46e4c.fedee8",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "tmp < 30",
+    "property": "payload.temperature",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "lt",
+        "v": "30",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 720,
+    "y": 260,
+    "wires": [["a6a59e98.c73aa8"]]
+  },
+  {
+    "id": "59dd31fb.e2cbb8",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "hum >= 35",
+    "property": "payload.humidity",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "35",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 730,
+    "y": 300,
+    "wires": [["a6a59e98.c73aa8"]]
+  },
+  {
+    "id": "8aa15bfd.af1a48",
+    "type": "and",
+    "z": "c63f3fac.045c4",
+    "name": "hot",
+    "property": "payload",
+    "propertyType": "msg",
+    "count": "2",
+    "predicates": "",
+    "broker": "df6cc1b7.0e642",
+    "priorities": "micropython",
+    "x": 890,
+    "y": 120,
+    "wires": [["a3496a71.f0ab68"]]
+  },
+  {
+    "id": "2f3f4b87.e76e7c",
+    "type": "and",
+    "z": "c63f3fac.045c4",
+    "name": "cold",
+    "property": "payload",
+    "propertyType": "msg",
+    "count": "2",
+    "predicates": "",
+    "broker": "df6cc1b7.0e642",
+    "priorities": "micropython",
+    "x": 890,
+    "y": 200,
+    "wires": [["a8955ef5.ff02e8"]]
+  },
+  {
+    "id": "a6a59e98.c73aa8",
+    "type": "and",
+    "z": "c63f3fac.045c4",
+    "name": "misty",
+    "property": "payload",
+    "propertyType": "msg",
+    "count": "2",
+    "predicates": "",
+    "broker": "df6cc1b7.0e642",
+    "priorities": "micropython",
+    "x": 890,
+    "y": 280,
+    "wires": [["7c7d72ed.fd9e64"]]
+  },
+  {
+    "id": "a3496a71.f0ab68",
+    "type": "and",
+    "z": "c63f3fac.045c4",
+    "name": "hot",
+    "property": "payload",
+    "propertyType": "msg",
+    "count": "3",
+    "predicates": "",
+    "broker": "df6cc1b7.0e642",
+    "priorities": "micropython",
+    "x": 1230,
+    "y": 420,
+    "wires": [["115c5320.558c85"]]
+  },
+  {
+    "id": "a8955ef5.ff02e8",
+    "type": "and",
+    "z": "c63f3fac.045c4",
+    "name": "cold",
+    "property": "payload",
+    "propertyType": "msg",
+    "count": "3",
+    "predicates": "",
+    "broker": "df6cc1b7.0e642",
+    "priorities": "micropython",
+    "x": 1230,
+    "y": 500,
+    "wires": [["ec84cda3.f3fee8"]]
+  },
+  {
+    "id": "7c7d72ed.fd9e64",
+    "type": "and",
+    "z": "c63f3fac.045c4",
+    "name": "misty",
+    "property": "payload",
+    "propertyType": "msg",
+    "count": "3",
+    "predicates": "",
+    "broker": "df6cc1b7.0e642",
+    "priorities": "micropython",
+    "x": 1230,
+    "y": 580,
+    "wires": [["6b930f0d.7cde88"]]
+  },
+  {
+    "id": "60128b3c.0c744c",
+    "type": "temperature-humidity",
+    "z": "c63f3fac.045c4",
+    "name": "",
+    "pin": "12",
+    "predicates": "temperature humidity micropython",
+    "priorities": "",
+    "repeat": true,
+    "interval": "5000",
+    "broker": "df6cc1b7.0e642",
+    "action": "local",
+    "x": 270,
+    "y": 500,
+    "wires": [
+      [
+        "2e5a0bdb.8bd3f4",
+        "a86e2ad7.3fd92",
+        "6f9bddd8.395c1c",
+        "3b78106e.c861b8",
+        "b8d89a95.eb1a88",
+        "b6985cf6.b0942"
+      ],
+      ["e01f0c8d.8f1c1"]
+    ]
+  },
+  {
+    "id": "2e5a0bdb.8bd3f4",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "tmp >= 30",
+    "property": "payload.temperature",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "30",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 720,
+    "y": 400,
+    "wires": [["47b1ad15.491b14"]]
+  },
+  {
+    "id": "a86e2ad7.3fd92",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "hum >= 30",
+    "property": "payload.humidity",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "30",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 730,
+    "y": 440,
+    "wires": [["47b1ad15.491b14"]]
+  },
+  {
+    "id": "6f9bddd8.395c1c",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "tmp <= 10",
+    "property": "payload.temperature",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "lte",
+        "v": "10",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 720,
+    "y": 480,
+    "wires": [["a67b67f6.876b1"]]
+  },
+  {
+    "id": "3b78106e.c861b8",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "hum <= 10",
+    "property": "payload.humidity",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "lte",
+        "v": "10",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 730,
+    "y": 520,
+    "wires": [["a67b67f6.876b1"]]
+  },
+  {
+    "id": "b8d89a95.eb1a88",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "tmp < 30",
+    "property": "payload.temperature",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "lt",
+        "v": "30",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 720,
+    "y": 560,
+    "wires": [["e3e4370d.f1b78"]]
+  },
+  {
+    "id": "b6985cf6.b0942",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "hum >= 35",
+    "property": "payload.humidity",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "35",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 730,
+    "y": 600,
+    "wires": [["e3e4370d.f1b78"]]
+  },
+  {
+    "id": "47b1ad15.491b14",
+    "type": "and",
+    "z": "c63f3fac.045c4",
+    "name": "hot",
+    "property": "payload",
+    "propertyType": "msg",
+    "count": "2",
+    "predicates": "",
+    "broker": "df6cc1b7.0e642",
+    "priorities": "micropython",
+    "x": 890,
+    "y": 420,
+    "wires": [["a3496a71.f0ab68"]]
+  },
+  {
+    "id": "a67b67f6.876b1",
+    "type": "and",
+    "z": "c63f3fac.045c4",
+    "name": "cold",
+    "property": "payload",
+    "propertyType": "msg",
+    "count": "2",
+    "predicates": "",
+    "broker": "df6cc1b7.0e642",
+    "priorities": "micropython",
+    "x": 890,
+    "y": 500,
+    "wires": [["a8955ef5.ff02e8"]]
+  },
+  {
+    "id": "e3e4370d.f1b78",
+    "type": "and",
+    "z": "c63f3fac.045c4",
+    "name": "misty",
+    "property": "payload",
+    "propertyType": "msg",
+    "count": "2",
+    "predicates": "",
+    "broker": "df6cc1b7.0e642",
+    "priorities": "micropython",
+    "x": 890,
+    "y": 580,
+    "wires": [["7c7d72ed.fd9e64"]]
+  },
+  {
+    "id": "587b7db3.21ddbc",
+    "type": "temperature-humidity",
+    "z": "c63f3fac.045c4",
+    "name": "",
+    "pin": "12",
+    "predicates": "temperature humidity micropython",
+    "priorities": "",
+    "repeat": true,
+    "interval": "5000",
+    "broker": "df6cc1b7.0e642",
+    "action": "local",
+    "x": 270,
+    "y": 800,
+    "wires": [
+      [
+        "fc15cf76.c2816",
+        "7ff8b321.8343e4",
+        "c7b6a6c2.f91688",
+        "d899aee8.2474c8",
+        "6ea06f44.6f61c",
+        "97deeb9.2a87598"
+      ],
+      ["3316da3a.979da6"]
+    ]
+  },
+  {
+    "id": "fc15cf76.c2816",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "tmp >= 30",
+    "property": "payload.temperature",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "30",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 720,
+    "y": 700,
+    "wires": [["fdba47ae.ff982"]]
+  },
+  {
+    "id": "7ff8b321.8343e4",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "hum >= 30",
+    "property": "payload.humidity",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "30",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 730,
+    "y": 740,
+    "wires": [["fdba47ae.ff982"]]
+  },
+  {
+    "id": "c7b6a6c2.f91688",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "tmp <= 10",
+    "property": "payload.temperature",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "lte",
+        "v": "10",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 720,
+    "y": 780,
+    "wires": [["929249c8.7bf2f"]]
+  },
+  {
+    "id": "d899aee8.2474c8",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "hum <= 10",
+    "property": "payload.humidity",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "lte",
+        "v": "10",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 730,
+    "y": 820,
+    "wires": [["929249c8.7bf2f"]]
+  },
+  {
+    "id": "6ea06f44.6f61c",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "tmp < 30",
+    "property": "payload.temperature",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "lt",
+        "v": "30",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 720,
+    "y": 860,
+    "wires": [["7e870d4f.7f0ebc"]]
+  },
+  {
+    "id": "97deeb9.2a87598",
+    "type": "if",
+    "z": "c63f3fac.045c4",
+    "name": "hum >= 35",
+    "property": "payload.humidity",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "35",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "predicates": "",
+    "priorities": "micropython",
+    "broker": "df6cc1b7.0e642",
+    "x": 730,
+    "y": 900,
+    "wires": [["7e870d4f.7f0ebc"]]
+  },
+  {
+    "id": "fdba47ae.ff982",
+    "type": "and",
+    "z": "c63f3fac.045c4",
+    "name": "hot",
+    "property": "payload",
+    "propertyType": "msg",
+    "count": "2",
+    "predicates": "",
+    "broker": "df6cc1b7.0e642",
+    "priorities": "micropython",
+    "x": 890,
+    "y": 720,
+    "wires": [["a3496a71.f0ab68"]]
+  },
+  {
+    "id": "929249c8.7bf2f",
+    "type": "and",
+    "z": "c63f3fac.045c4",
+    "name": "cold",
+    "property": "payload",
+    "propertyType": "msg",
+    "count": "2",
+    "predicates": "",
+    "broker": "df6cc1b7.0e642",
+    "priorities": "micropython",
+    "x": 890,
+    "y": 800,
+    "wires": [["a8955ef5.ff02e8"]]
+  },
+  {
+    "id": "7e870d4f.7f0ebc",
+    "type": "and",
+    "z": "c63f3fac.045c4",
+    "name": "misty",
+    "property": "payload",
+    "propertyType": "msg",
+    "count": "2",
+    "predicates": "",
+    "broker": "df6cc1b7.0e642",
+    "priorities": "micropython",
+    "x": 890,
+    "y": 880,
+    "wires": [["7c7d72ed.fd9e64"]]
+  },
+  {
+    "id": "115c5320.558c85",
+    "type": "proxy mqtt out",
+    "z": "c63f3fac.045c4",
+    "name": "",
+    "topic": "AC/ON",
+    "qos": "",
+    "retain": "",
+    "broker": "df6cc1b7.0e642",
+    "predicates": "",
+    "priorities": "micropython",
+    "x": 1400,
+    "y": 420,
+    "wires": []
+  },
+  {
+    "id": "ec84cda3.f3fee8",
+    "type": "proxy mqtt out",
+    "z": "c63f3fac.045c4",
+    "name": "",
+    "topic": "AC/OFF",
+    "qos": "",
+    "retain": "",
+    "broker": "df6cc1b7.0e642",
+    "predicates": "",
+    "priorities": "micropython",
+    "x": 1400,
+    "y": 500,
+    "wires": []
+  },
+  {
+    "id": "6b930f0d.7cde88",
+    "type": "proxy mqtt out",
+    "z": "c63f3fac.045c4",
+    "name": "",
+    "topic": "AC/HUM",
+    "qos": "",
+    "retain": "",
+    "broker": "df6cc1b7.0e642",
+    "predicates": "",
+    "priorities": "micropython",
+    "x": 1400,
+    "y": 580,
+    "wires": []
+  },
+  {
+    "id": "cdb6a83b.5d5e08",
+    "type": "function",
+    "z": "c63f3fac.045c4",
+    "name": "",
+    "func": "if(msg.start){\n    if(!context.get('timerId')){\n        const timerId = setInterval(() => {\n            const temp_msg = {\n                payload: {\n                    temperature: 30,\n                    humidity: 30,\n                },\n                node_id: node.id, \n                device_id: 'node-red'\n            };\n            node.send(temp_msg); \n        }, 5000);\n        context.set('timerId', timerId)\n    }\n}else if(msg.start === false){\n    if(context.get('timerId')){\n        clearInterval(context.get('timerId'))\n        context.set('timerId', null)\n    }\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "// Code added here will be run when the\n// node is being stopped or re-deployed.\nif(context.get('timerId')){\n        clearInterval(context.get('timerId'))\n        context.set('timerId', null)\n    }",
+    "x": 480,
+    "y": 300,
+    "wires": [
+      [
+        "f4a27cc0.f8ca38",
+        "d251f13a.cd9288",
+        "fe9f33aa.8384d",
+        "8e00b864.e8ec68",
+        "58d46e4c.fedee8",
+        "59dd31fb.e2cbb8"
+      ]
+    ]
+  },
+  {
+    "id": "e01f0c8d.8f1c1",
+    "type": "function",
+    "z": "c63f3fac.045c4",
+    "name": "",
+    "func": "if(msg.start){\n    if(!context.get('timerId')){\n        const timerId = setInterval(() => {\n            const temp_msg = {\n                payload: {\n                    temperature: 30,\n                    humidity: 30,\n                },\n                node_id: node.id, \n                device_id: 'node-red'\n            };\n            node.send(temp_msg); \n        }, 5000);\n        context.set('timerId', timerId)\n    }\n}else if(msg.start === false){\n    if(context.get('timerId')){\n        clearInterval(context.get('timerId'))\n        context.set('timerId', null)\n    }\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "// Code added here will be run when the\n// node is being stopped or re-deployed.\nif(context.get('timerId')){\n        clearInterval(context.get('timerId'))\n        context.set('timerId', null)\n    }",
+    "x": 480,
+    "y": 600,
+    "wires": [
+      [
+        "b6985cf6.b0942",
+        "b8d89a95.eb1a88",
+        "3b78106e.c861b8",
+        "6f9bddd8.395c1c",
+        "a86e2ad7.3fd92",
+        "2e5a0bdb.8bd3f4"
+      ]
+    ]
+  },
+  {
+    "id": "3316da3a.979da6",
+    "type": "function",
+    "z": "c63f3fac.045c4",
+    "name": "",
+    "func": "if(msg.start){\n    if(!context.get('timerId')){\n        const timerId = setInterval(() => {\n            const temp_msg = {\n                payload: {\n                    temperature: 30,\n                    humidity: 30,\n                },\n                node_id: node.id, \n                device_id: 'node-red'\n            };\n            node.send(temp_msg); \n        }, 5000);\n        context.set('timerId', timerId)\n    }\n}else if(msg.start === false){\n    if(context.get('timerId')){\n        clearInterval(context.get('timerId'))\n        context.set('timerId', null)\n    }\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "// Code added here will be run when the\n// node is being stopped or re-deployed.\nif(context.get('timerId')){\n        clearInterval(context.get('timerId'))\n        context.set('timerId', null)\n    }",
+    "x": 480,
+    "y": 900,
+    "wires": [
+      [
+        "97deeb9.2a87598",
+        "6ea06f44.6f61c",
+        "d899aee8.2474c8",
+        "c7b6a6c2.f91688",
+        "7ff8b321.8343e4",
+        "fc15cf76.c2816"
+      ]
+    ]
+  },
+  {
+    "id": "df6cc1b7.0e642",
+    "type": "mqtt-broker",
+    "name": "",
+    "broker": "mosquitto",
+    "port": "1883",
+    "clientid": "",
+    "usetls": false,
+    "compatmode": false,
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "closeTopic": "",
+    "closeQos": "0",
+    "closePayload": "",
+    "willTopic": "alive/node-red",
+    "willQos": "1",
+    "willRetain": "true",
+    "willPayload": "0"
+  }
+]
